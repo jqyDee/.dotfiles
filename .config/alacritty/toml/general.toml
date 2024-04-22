@@ -10,9 +10,9 @@ color = "#ebdbb2"
 save_to_clipboard = true
 
 [cursor]
-blink_interval = 500
+blink_interval = 400
 blink_timeout = 0
-unfocused_hollow = false
+unfocused_hollow = true
 # thickness = 0.15
 
 [cursor.style]

@@ -1,5 +1,5 @@
 [font]
 normal = { family = "FiraCode Nerd Font Mono", style = "Regular"}
-size = 14
+size = 15
 offset = { x = 2, y = 2 }
 builtin_box_drawing = false

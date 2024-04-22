@@ -1,7 +1,7 @@
 export LD_LIBRARY_PATH="/opt/homebrew/opt/llvm/lib:$LD_LIBRARY_PATH"
 
 # match terminal
-export BAT_THEME=gruvbox-dark
+# export BAT_THEME=gruvbox-dark
 
 # ALIASES
 
@@ -18,6 +18,10 @@ alias gck="git checkout"
 
 # homebrew in path
 eval $(/opt/homebrew/bin/brew shellenv)
+
+if [ -z "$TMUX" ]; then
+  exec arch -arm64 tmux
+fi
 
 # move annoying .zcompdump files into a better hidden directory
 autoload -Uz compinit
@@ -118,8 +122,6 @@ source $ZSH/oh-my-zsh.sh
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
-
-export PATH="/usr/local/opt/openjdk/bin:$PATH"
 
 # CUSTOM
 set +m
