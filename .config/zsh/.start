@@ -1,2 +1,1 @@
-#!/bin/zsh
-env arch -arm64 /bin/zsh --login
+env arch -arm64 $(which zsh) --login

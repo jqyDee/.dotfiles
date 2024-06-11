@@ -1,7 +1,3 @@
-[shell]
-program = "/bin/zsh"
-args = ["-l"]
-
 [bell]
 duration = 300
 color = "#ebdbb2"
