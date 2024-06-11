@@ -1,16 +1,17 @@
 export SHELL_SESSIONS_DISABLE=1
 
 # history settings
-export HISTFILE="/Users/mfischbach/.config/zsh/.zsh_history"
+export HISTFILE="~/.config/zsh/.zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
 setopt appendhistory
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
-export PATH="${PATH:+${PATH}:}/opt/nim/bin"
-export PATH="${PATH:+${PATH}:}/opt/genie"
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+if [[ $(uname) == "Darwin" ]]; then
+    export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+fi
+
 export PATH="/opt/bin:$PATH"
 
 # .zshrc, etc. are located here

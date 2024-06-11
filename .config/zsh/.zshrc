@@ -1,23 +1,10 @@
-export LD_LIBRARY_PATH="/opt/homebrew/opt/llvm/lib:$LD_LIBRARY_PATH"
-
 # match terminal
-# export BAT_THEME=gruvbox-dark
+export BAT_THEME=gruvbox-dark
 
-# ALIASES
-
-# :-)
-alias vim=nvim
-
-# git
-alias gap="git add -p"
-alias gc="git commit"
-alias gcm="git commit -m"
-alias gp="git push"
-alias gpu="git pull"
-alias gck="git checkout"
-
-# homebrew in path
-eval $(/opt/homebrew/bin/brew shellenv)
+if [[ $(uname) == "Darwin" ]]; then
+    # homebrew in path
+    eval $(/opt/homebrew/bin/brew shellenv)
+fi
 
 if [ -z "$TMUX" ]; then
   exec arch -arm64 tmux
@@ -104,6 +91,10 @@ plugins=(
   zsh-syntax-highlighting
 )
 
+# zsh-autosuggest config
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#666666"
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -125,10 +116,6 @@ source $ZSH/oh-my-zsh.sh
 
 # CUSTOM
 set +m
-
-# zsh-autosuggest config
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#666666"
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
