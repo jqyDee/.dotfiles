@@ -1,27 +1,34 @@
 #!/bin/bash
 
-rm .zshenv
-cp ~/.zshenv .
+# zsh
+rm -rf zsh
+mkdir -p ./zsh/.config/zsh/
+cp ~/.zshenv ./zsh/
+cp ~/.zprofile ./zsh/
+cp -r ~/.config/zsh/.start zsh/.config/zsh/
+cp -r ~/.config/zsh/.zshrc zsh/.config/zsh/
 
-rm .zprofile
-cp ~/.zprofile .
+# alacritty
+rm -rf alacritty
+mkdir -p ./alacritty/.config/
+cp -r ~/.config/alacritty alacritty/.config
 
-rm .tmux.conf
-cp ~/.tmux.conf .
+# gh
+rm -rf gh
+mkdir -p ./gh/.config/
+cp -r ~/.config/gh gh/.config
 
-rm -r .config
+# nvim
+rm -rf nvim
+mkdir -p ./nvim/.config/
+cp -r ~/.config/nvim ./nvim/.config
 
-mkdir -p .config/alacritty/toml
-cp -a ~/.config/alacritty/toml/* .config/alacritty/toml/
-cp ~/.config/alacritty/alacritty.toml .config/alacritty/
+# sketchybar
+rm -rf sketchybar
+mkdir -p ./sketchybar/.config/
+cp -r ~/.config/sketchybar sketchybar/.config
 
-mkdir -p .config/zsh
-cp ~/.config/zsh/.start .config/zsh
-cp ~/.config/zsh/.zshrc .config/zsh
-
-mkdir -p .config/nvim/lua/{plugins,user}
-mkdir -p .config/nvim/after/plugin
-cp -a ~/.config/nvim/lua/plugins/* .config/nvim/lua/plugins/
-cp -a ~/.config/nvim/lua/user/* .config/nvim/lua/user/
-cp -a ~/.config/nvim/after/plugin/* .config/nvim/after/plugin/
-cp ~/.config/nvim/init.lua .config/nvim/
+# yabai
+rm -rf yabai
+mkdir -p ./yabai/.config/
+cp -r ~/.config/yabai yabai/.config
