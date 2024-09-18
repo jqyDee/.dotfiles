@@ -1,1 +1,0 @@
-env arch -arm64 $(which zsh) --login

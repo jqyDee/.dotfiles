@@ -1,0 +1,21 @@
+[shell]
+program = "/bin/zsh"
+args = ["-l"]
+
+[bell]
+duration = 300
+color = "#ebdbb2"
+
+[selection]
+save_to_clipboard = true
+
+[cursor]
+blink_interval = 200
+blink_timeout = 1
+unfocused_hollow = true
+thickness = 0.20
+
+[cursor.style]
+shape = "Block"
+blinking = "On"
+
