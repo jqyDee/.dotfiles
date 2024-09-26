@@ -20,10 +20,6 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 })
 
 cmp.setup({
-    window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
-    },
     preselect = "item",
     sources = {
         { name = "nvim_lsp" },
@@ -52,7 +48,6 @@ end)
 require("mason").setup({})
 require("mason-lspconfig").setup({
     ensure_installed = {
-        "clangd",
     },
     handlers = {
         lsp.default_setup,
