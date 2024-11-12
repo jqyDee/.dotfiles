@@ -2,16 +2,21 @@ vim.opt.nu = true
 vim.opt.relativenumber = true
 
 vim.opt.splitright = true
-vim.opt.splitbelow = true
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
-vim.opt.wrap = false
+vim.opt.wrap = true
+
+-- find recursively
+vim.opt.path:append "**"
+
+-- gcc flags
+vim.cmd("let $LDFLAGS = '-Wall -Wextra -Werror -Wpedantic -std=c18'")
 
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -24,12 +29,9 @@ vim.opt.incsearch = true
 vim.opt.termguicolors = true
 
 vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
 
 vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
-
-vim.g.loaded_perl_provider = 0
 
 vim.g.mapleader = " "

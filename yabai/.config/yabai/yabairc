@@ -29,9 +29,6 @@ yabai -m config                                 \
     mouse_drop_action            swap           \
     focus_follows_mouse          autoraise      \
 
-yabai -m config external_bar main:30:0
-
-
 # disable specific apps
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Calculator$" manage=off

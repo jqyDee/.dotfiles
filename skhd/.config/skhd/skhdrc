@@ -1,10 +1,13 @@
 # -- Changing Window Focus --
 
+# open some applications
+alt - return : alacritty
+
 # change window focus within space
-alt - h : yabai -m window --focus west
-alt - j : yabai -m window --focus south
-alt - k : yabai -m window --focus north
-alt - l : yabai -m window --focus east
+ctrl - h : yabai -m window --focus west
+ctrl - j : yabai -m window --focus south
+ctrl - k : yabai -m window --focus north
+ctrl - l : yabai -m window --focus east
 
 
 # -- Modifying the Layout --
@@ -20,7 +23,6 @@ shift + alt - x : yabai -m space --mirror x-axis
 
 # toggle window float
 shift + alt - space : yabai -m window --toggle float --grid 4:4:1:1:2:2
-
 
 # -- Modifying Window Size --
 
@@ -76,11 +78,3 @@ ctrl + shift - 5 : yabai -m window --space 5;
 ctrl + shift - 6 : yabai -m window --space 6;
 ctrl + shift - 7 : yabai -m window --space 7;
 ctrl + shift - 8 : yabai -m window --space 8;
-
-
-# -- Starting/Stopping/Restarting Yabai --
-
-# stop/start/restart yabai
-ctrl + alt - q : brew services stop yabai
-ctrl + alt - s : brew services start yabai
-ctrl + alt - r : brew services restart yabai

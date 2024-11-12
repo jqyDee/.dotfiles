@@ -3,12 +3,6 @@ local lsp = require("lsp-zero")
 lsp.preset("recommended")
 lsp.set_preferences({ sign_icons = {} })
 
-vim.keymap.set('n', '<leader>ld', '<cmd>lua vim.diagnostic.setqflist()<cr>')
-
-vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
-vim.keymap.set('n', '<C-k>', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-vim.keymap.set('n', '<C-j>', '<cmd>lua vim.diagnostic.goto_next()<cr>')
-
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_format = require('lsp-zero').cmp_format({ details = true })

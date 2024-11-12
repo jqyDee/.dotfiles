@@ -1,0 +1,5 @@
+clear-package-db
+global-package-db
+package-db /Users/mfischbach/.cabal/store/ghc-9.4.8/package.db
+package-id base-4.17.2.1
+package-id lnchck-1.0.2-94161c4d

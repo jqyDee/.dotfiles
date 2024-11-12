@@ -1,2 +1,0 @@
-#!/bin/zsh
-env arch -arm64 /bin/zsh --login
