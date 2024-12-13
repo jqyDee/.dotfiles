@@ -1,6 +1,7 @@
-[shell]
+[terminal.shell]
 program = "/bin/zsh"
-args = ["-l"]
+# which tmux
+args = ["-l", "-c", "/opt/homebrew/bin/tmux new-session -A -s main"]
 
 [bell]
 duration = 300
@@ -11,11 +12,13 @@ save_to_clipboard = true
 
 [cursor]
 blink_interval = 200
-blink_timeout = 1
+blink_timeout = 100
 unfocused_hollow = true
 thickness = 0.20
 
 [cursor.style]
 shape = "Block"
 blinking = "On"
+
+[terminal]
 
