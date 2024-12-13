@@ -24,6 +24,7 @@ shift + alt - x : yabai -m space --mirror x-axis
 # toggle window float
 shift + alt - space : yabai -m window --toggle float --grid 4:4:1:1:2:2
 
+
 # -- Modifying Window Size --
 
 # maximize a window
@@ -78,3 +79,11 @@ ctrl + shift - 5 : yabai -m window --space 5;
 ctrl + shift - 6 : yabai -m window --space 6;
 ctrl + shift - 7 : yabai -m window --space 7;
 ctrl + shift - 8 : yabai -m window --space 8;
+
+
+# -- Starting/Stopping/Restarting Yabai --
+
+# stop/start/restart yabai
+ctrl + alt - q : yabai --stop-service
+ctrl + alt - s : yabai --start-service
+ctrl + alt - r : yabai --restart-service
