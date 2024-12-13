@@ -6,7 +6,7 @@ vim.keymap.set("n", ";vc", "<cmd>silent vs %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$
 vim.keymap.set("n", ";sc", "<cmd>silent split %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<CR>")
 
 -- open netrw
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", "<cmd>Ex<CR>")
 
 -- move selected block up/down
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
