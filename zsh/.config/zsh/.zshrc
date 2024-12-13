@@ -1,5 +1,7 @@
-if [[ ! -v TMUX && $TERM_PROGRAM != "vscode" ]]; then
-	tmux_chooser && exit
+# debug zsh startup time
+# SHELL: time ZSH_DEBUGRC=1 zsh -i -c exit
+if [ -n "${ZSH_DEBUGRC+1}" ]; then
+    zmodload zsh/zprof
 fi
 
 # match terminal
@@ -13,32 +15,11 @@ eval $(/opt/homebrew/bin/brew shellenv)
 
 # haskell in Path
 export PATH=$PATH:/Users/mfischbach/Developer/utils/haskell/
+[ -f "/Users/mfischbach/.ghcup/env" ] && . "/Users/mfischbach/.ghcup/env" # ghcup-env
 
 # move annoying .zcompdump files into a better hidden directory
 autoload -Uz compinit
 compinit -d ~/.config/zsh/.zcompdump
-
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/mfischbach/.oh-my-zsh"
-
-# oh my zsh
-ZSH_THEME="geoffgarside"
-
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-plugins=(
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-)
-
-# zsh-autosuggest config
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#666666"
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-
-source $ZSH/oh-my-zsh.sh
 
 # history settings
 export HISTFILE="/Users/mfischbach/.config/zsh/.zsh_history"
@@ -56,5 +37,19 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-# ghc ?!
-[ -f "/Users/mfischbach/.ghcup/env" ] && . "/Users/mfischbach/.ghcup/env" # ghcup-env
+# java
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+# zsh auto suggestions (https://github.com/zsh-users/zsh-autosuggestions)
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# zsh syntax highlighting (https://github.com/zsh-users/zsh-syntax-highlighting.git)
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# starship
+eval "$(starship init zsh)"
+
+# debug zsh startup time
+if [ -n "${ZSH_DEBUGRC+1}" ]; then
+    zprof
+fi
