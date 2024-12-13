@@ -1,0 +1,84 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+
+format = """\
+  $time\
+  $username\
+  $directory\
+  $git_branch\
+  $git_status\
+  $character\
+  """
+
+right_format = """\
+  $c\
+  $haskell\
+  $python\
+  """
+
+[time] 
+disabled = false
+format = ' [\[$time\]]($style) '
+style = 'bold white'
+
+[username]
+style_user = 'bold cyan'
+show_always = true
+format = '[$user]($style):'
+
+[directory]
+truncation_length = 1
+truncation_symbol = '…/'
+truncate_to_repo = true
+format = '[$path]($style)[$read_only]($read_only_style) '
+style = 'bold green'
+disabled = false
+
+[character]
+success_symbol = '[\$](bold white)'
+error_symbol = '[\$](bold red)'
+vimcmd_symbol = '[VI](bold white)'
+vimcmd_replace_one_symbol = '[VI](bold blue)'
+vimcmd_replace_symbol = '[VI](bold red)'
+vimcmd_visual_symbol = '[VI](bold orange)'
+
+[[battery.display]]
+threshold = 10
+style = "bold red"
+
+[[battery.display]]
+threshold = 20
+style = "bold yellow"
+
+[[battery.display]]
+threshold = 80
+style = "bold green"
+
+[c]
+commands = [ [ 'gcc', '--version' ], [ 'cc', '--version' ], [ 'clang', '--version' ] ]
+format = '[$symbol$name ]($style)'
+style = 'dimmed white'
+symbol = ' '
+
+[haskell]
+format = '[$symbol($version )]($style)'
+style = 'dimmed white'
+
+[python]
+format = '[${symbol} (${version} )(\($virtualenv\) )]($style)'
+pyenv_version_name = true
+version_format = '${raw}'
+symbol = ''
+style = 'dimmed white'
+
+[git_branch]
+format = '[(\($remote_name:\))$branch]($style)'
+style = 'bold yellow'
+always_show_remote = true
+
+[git_status]
+format = '[\[$all_status$ahead_behind\]]($style) '
+style = 'bold #d65d0e'
+
