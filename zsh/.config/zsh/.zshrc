@@ -9,6 +9,7 @@ export BAT_THEME=gruvbox-dark
 
 # aliases
 alias gcc=gcc-14
+alias valgrind='docker run -it -v $PWD:/tmp -w /tmp ubuntu'
 
 # homebrew in path
 eval $(/opt/homebrew/bin/brew shellenv)
