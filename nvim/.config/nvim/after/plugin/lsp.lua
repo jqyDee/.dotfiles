@@ -20,6 +20,7 @@ cmp.setup({
     { name = "buffer" },
   },
   completion = {
+    autocomplete = false,
     completeopt = "menu,menuone,noinsert"
   },
   mapping = cmp_mappings,
