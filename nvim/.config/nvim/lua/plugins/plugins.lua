@@ -23,9 +23,6 @@ return {
   -- lsp
   "williamboman/mason.nvim",
   "williamboman/mason-lspconfig.nvim",
-  -- COPILOT
-  "zbirenbaum/copilot.lua",
-  -- COPILOT
   {
     "VonHeikemen/lsp-zero.nvim",
     branch = "v3.x"
