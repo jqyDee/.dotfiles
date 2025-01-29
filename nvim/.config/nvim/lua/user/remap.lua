@@ -1,20 +1,11 @@
 vim.g.mapleader = " "
 
--- switch between .c and .h in same dir
-vim.keymap.set("n", ";c", "<cmd>silent e %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<CR>")
-vim.keymap.set("n", ";vc", "<cmd>silent vs %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<CR>")
-vim.keymap.set("n", ";sc", "<cmd>silent split %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<CR>")
-
 -- open netrw
 vim.keymap.set("n", "<leader>pv", "<cmd>Ex<CR>")
 
 -- move selected block up/down
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-
--- keep cursor in the middle while searching
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
 
 -- keep current in buffer
 vim.keymap.set("x", "<leader>p", "\"_dP")
@@ -45,7 +36,7 @@ vim.keymap.set("n", "<leader>qf", "<cmd>copen<CR>")
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 
 -- netrw mark all files selected in visual mode
-vim.keymap.set("v", "<leader>mf", "<cmd>normal mf<CR>")
+vim.keymap.set("x", "<leader>mf", "<cmd>norm mf<CR>")
 
 -- format buffer
 vim.keymap.set("n", "<leader>f", function()
