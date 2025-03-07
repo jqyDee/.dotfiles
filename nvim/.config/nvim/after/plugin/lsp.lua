@@ -41,7 +41,8 @@ lsp.on_attach(function(client)
 end)
 
 require('lspconfig').clangd.setup({
-  cmd = { "clangd", "--header-insertion=never", "--suggest-missing-includes", }
+  cmd = { "clangd", "--header-insertion=never", "--suggest-missing-includes",
+          "--compile-commands-dir=." }
 })
 
 require("mason").setup({})

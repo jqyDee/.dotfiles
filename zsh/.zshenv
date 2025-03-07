@@ -4,3 +4,4 @@ export SHELL_SESSIONS_DISABLE=1
 if [ -z "$INTELLIJ_ENVIRONMENT_READER" ]; then
     export ZDOTDIR=~/.config/zsh
 fi
+

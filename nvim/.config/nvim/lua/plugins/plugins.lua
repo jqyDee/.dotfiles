@@ -16,7 +16,8 @@ return {
   {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.8',
-    dependencies = { 'nvim-lua/plenary.nvim' }
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    file_ignore_patterns = { "bin/**" },
   },
 
   -- treesitter
@@ -34,12 +35,9 @@ return {
   "hrsh7th/nvim-cmp",
   "L3MON4D3/LuaSnip",
 
-  -- debugger
+  -- markdown
   {
-    "rcarriga/nvim-dap-ui",
-    dependencies = {
-      "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio",
-    },
+    "OXY2DEV/markview.nvim",
+    lazy = false
   },
 }

@@ -2,6 +2,7 @@
 program = "/bin/zsh"
 # which tmux
 args = ["-l", "-c", "/opt/homebrew/bin/tmux new-session -A -s main"]
+# args = ["-l"]
 
 [bell]
 duration = 300
@@ -19,6 +20,4 @@ thickness = 0.20
 [cursor.style]
 shape = "Block"
 blinking = "On"
-
-[terminal]
 
