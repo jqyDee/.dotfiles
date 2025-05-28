@@ -1,30 +1,40 @@
 # match terminal
 export BAT_THEME=gruvbox-dark
 
-# aliases
-alias gcc=gcc-14
-alias valgrind='docker run -it -v $PWD:/tmp -w /tmp ubuntu1'
-alias sshuni='ssh -X -l csbb8241 zid-gpl.uibk.ac.at'
-alias icloud='cd "/Users/mfischbach/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"'
+# MACOS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # aliases
+  alias gcc=gcc-14
 
-# homebrew in path
-eval $(/opt/homebrew/bin/brew shellenv)
+  alias valgrind='docker run -it -v $PWD:/tmp -w /tmp ubuntu1'
+  alias sshuni='ssh -X -l csbb8241 zid-gpl.uibk.ac.at'
+  alias icloud='cd "/Users/mfischbach/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"'
 
-# haskell in Path
-export PATH=$PATH:/Users/mfischbach/Developer/utils/haskell/
-[ -f "/Users/mfischbach/.ghcup/env" ] && . "/Users/mfischbach/.ghcup/env"
+  # homebrew in path
+  eval $(/opt/homebrew/bin/brew shellenv)
 
-# rust first in Path
-export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
+  # haskell in Path
+  export PATH=$PATH:/Users/mfischbach/Developer/utils/haskell/
+  [ -f "/Users/mfischbach/.ghcup/env" ] && . "/Users/mfischbach/.ghcup/env"
 
-# brew llvm in path
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+  # rust first in Path
+  export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 
-# java in path
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+  # brew llvm in path
+  export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/homebrew/lib
-export C_INCLUDE_PATH=$C_INCLUDE_PATH:/opt/homebrew/include
+  # java in path
+  export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/homebrew/lib
+  export C_INCLUDE_PATH=$C_INCLUDE_PATH:/opt/homebrew/include
+
+  # pyenv
+  export PYENV_ROOT="$HOME/.pyenv"
+  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+fi
+
 
 
 # gcc as c compiler
@@ -44,11 +54,6 @@ setopt SHARE_HISTORY
 
 # set monitor?!
 set +m
-
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
 
 # zsh auto suggestions (https://github.com/zsh-users/zsh-autosuggestions)
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
