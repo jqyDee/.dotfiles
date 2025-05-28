@@ -1,20 +1,12 @@
 # match terminal
 export BAT_THEME=gruvbox-dark
 
-<<<<<<< HEAD
 # aliases
-alias gcc=gcc-14
-alias ubuntu='docker run -it -v "$PWD":/home/mf-ubuntu/tmp -w /home/mf-ubuntu/tmp mfischbach/ubuntu-c:version3 bash -c "su - mf-ubuntu"'
-alias sshuni='ssh -X -l csbb8241 zid-gpl.uibk.ac.at'
-alias icloud='cd "/Users/mfischbach/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"'
-=======
 # MACOS
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # aliases
   alias gcc=gcc-14
->>>>>>> cd9fa027eb3e6a621982fa8f125f4b3cb0a39043
-
-  alias valgrind='docker run -it -v $PWD:/tmp -w /tmp ubuntu1'
+  alias ubuntu='docker run -it -v "$PWD":/home/mf-ubuntu/tmp -w /home/mf-ubuntu/tmp mfischbach/ubuntu-c:version3 bash -c "su - mf-ubuntu"'
   alias sshuni='ssh -X -l csbb8241 zid-gpl.uibk.ac.at'
   alias icloud='cd "/Users/mfischbach/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"'
 
@@ -41,9 +33,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   export PYENV_ROOT="$HOME/.pyenv"
   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
   eval "$(pyenv init -)"
+
+  # hist file
+  export HISTFILE="/Users/mfischbach/.config/zsh/.zsh_history"
 fi
-
-
 
 # gcc as c compiler
 export CC=gcc
@@ -53,7 +46,6 @@ autoload -Uz compinit
 compinit -d ~/.config/zsh/.zcompdump
 
 # history settings
-export HISTFILE="/Users/mfischbach/.config/zsh/.zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
 setopt appendhistory
