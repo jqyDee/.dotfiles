@@ -42,3 +42,6 @@ vim.keymap.set("x", "<leader>mf", "<cmd>norm mf<CR>")
 vim.keymap.set("n", "<leader>f", function()
   vim.lsp.buf.format()
 end)
+
+-- open typst preview
+vim.keymap.set("n", "<leader>ot", "<cmd>TypstPreview<CR>")

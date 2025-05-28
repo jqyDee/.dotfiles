@@ -1,7 +1,7 @@
 # function to copy file to uni zid server
-copyfileuni() {
+copyuni() {
   if [[ $# -lt 3 ]]; then
-    echo "Usage: copyfileuni <to|from> <src-filepath> <dst-filepath>"
+    echo "Usage: copyuni <to|from> <src-filepath> <dst-filepath>"
     return 1
   fi
 
@@ -10,36 +10,12 @@ copyfileuni() {
   local dst_filepath="$3"
 
   if [[ "$to_from" =~ "to" ]]; then
-    if [[ ! -f "$src_filepath" ]]; then
-      echo "Error: File '$src_filepath' does not exist!"
-      return 1
-    fi
-    rsync -av "$src_filepath" "csbb8241@zid-gpl.uibk.ac.at:/home/csbb8241/transfer/$dst_filepath"
+    rsync -av --progress "$src_filepath" "csbb8241@zid-gpl.uibk.ac.at:/home/csbb8241/transfer/$dst_filepath"
   elif [[ "$to_from" =~ "from" ]]; then
-    rsync -av "csbb8241@zid-gpl.uibk.ac.at:/home/csbb8241/transfer/$src_filepath" "$dst_filepath"
+    rsync -av --progress "csbb8241@zid-gpl.uibk.ac.at:/home/csbb8241/transfer/$src_filepath" "$dst_filepath"
   else
-    echo "Usage: copyfileuni <to|from> <src-filepath> <dst-filepath>"
+    echo "Usage: copyuni <to|from> <src-filepath> <dst-filepath>"
     return 1
   fi
 }
 
-# function to copy dir to uni zid server
-copydiruni() {
-  if [[ $# -lt 3 ]]; then
-    echo "Usage: copytouni <to|from> <src-dirpath> <dst-dirpath>"
-    return 1
-  fi
-
-  local to_from="$1"
-  local src_dirpath="$2"
-  local dst_dirpath="$3"
-
-  if [[ "$to_from" =~ "to" ]]; then
-    rsync -av "$src_dirpath" "csbb8241@zid-gpl.uibk.ac.at:/home/csbb8241/transfer/$dst_dirpath"
-  elif [[ "$to_from" =~ "from" ]]; then
-    rsync -av "csbb8241@zid-gpl.uibk.ac.at:/home/csbb8241/transfer/$src_dirpath" "$dst_dirpath"
-  else
-    echo "Usage: copyfileuni <to|from> <src-dirpath> <dst-dirpath>"
-    return 1
-  fi
-}

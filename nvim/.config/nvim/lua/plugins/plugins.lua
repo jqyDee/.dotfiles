@@ -40,4 +40,18 @@ return {
     "OXY2DEV/markview.nvim",
     lazy = false
   },
+
+  -- typst
+  {
+  'chomosuke/typst-preview.nvim',
+  lazy = false, -- or ft = 'typst'
+  version = '1.*',
+  opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+  },
+
+  -- python
+  {
+    "nvimtools/none-ls.nvim",
+     dependencies = { 'nvim-lua/plenary.nvim' },
+  }
 }

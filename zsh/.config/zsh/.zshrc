@@ -1,14 +1,11 @@
 # match terminal
 export BAT_THEME=gruvbox-dark
 
-# SDL showing in nvim
-export CPATH=$(brew --prefix sdl2)/include/SDL2:$CPATH
-export LIBRARY_PATH=$(brew --prefix sdl2)/lib:$LIBRARY_PATH
-
 # aliases
 alias gcc=gcc-14
-alias valgrind='docker run -it -v $PWD:/tmp -w /tmp ubuntu'
+alias valgrind='docker run -it -v $PWD:/tmp -w /tmp ubuntu1'
 alias sshuni='ssh -X -l csbb8241 zid-gpl.uibk.ac.at'
+alias icloud='cd "/Users/mfischbach/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"'
 
 # homebrew in path
 eval $(/opt/homebrew/bin/brew shellenv)
@@ -25,6 +22,10 @@ export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 
 # java in path
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/homebrew/lib
+export C_INCLUDE_PATH=$C_INCLUDE_PATH:/opt/homebrew/include
+
 
 # gcc as c compiler
 export CC=gcc

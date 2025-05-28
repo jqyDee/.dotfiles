@@ -3,6 +3,6 @@ normal = { family = "Hack Nerd Font Mono", style = "Regular"}
 bold = { style = "Regular" }
 italic = { style = "italic" }
 bold_italic = { style = "Regular" }
-size = 17
+size = 15
 offset = { x = 1, y = 1 }
 builtin_box_drawing = false

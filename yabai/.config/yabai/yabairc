@@ -14,7 +14,7 @@ sudo yabai --load-sa
 # styling settings
 yabai -m config window_shadow                float
 
-yabai -m config menubar_opacity              0.6
+yabai -m config menubar_opacity              0.5
 yabai -m config window_opacity               off
 yabai -m config active_window_opacity        1.0
 yabai -m config normal_window_opacity        1.0
@@ -26,11 +26,11 @@ yabai -m config insert_feedback_color        0xfffbf1c7
 # yabai -m config external_bar                 off:40:0
 
 # window settings
-yabai -m config top_padding                  2
-yabai -m config bottom_padding               2
-yabai -m config left_padding                 2
-yabai -m config right_padding                2
-yabai -m config window_gap                   2
+yabai -m config top_padding                  4
+yabai -m config bottom_padding               4
+yabai -m config left_padding                 4
+yabai -m config right_padding                4
+yabai -m config window_gap                   4
 
 yabai -m config window_insertion_point       focused
 yabai -m config window_origin_display        focused
@@ -55,7 +55,5 @@ yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Calculator$" manage=off
 yabai -m rule --add app="^QuickTime Player$" manage=off
 yabai -m rule --add app="^OmniDiskSweeper$" manage=off
-
-borders active_color=0xf0fbf1c7 inactive_color=0x00000000 width=2.0 hidpi=on style=round &
 
 echo "yabai configuration loaded..."
