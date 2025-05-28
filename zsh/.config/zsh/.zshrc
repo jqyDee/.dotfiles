@@ -3,7 +3,7 @@ export BAT_THEME=gruvbox-dark
 
 # aliases
 alias gcc=gcc-14
-alias valgrind='docker run -it -v $PWD:/tmp -w /tmp ubuntu1'
+alias ubuntu='docker run -it -v "$PWD":/home/mf-ubuntu/tmp -w /home/mf-ubuntu/tmp mfischbach/ubuntu-c:version3 bash -c "su - mf-ubuntu"'
 alias sshuni='ssh -X -l csbb8241 zid-gpl.uibk.ac.at'
 alias icloud='cd "/Users/mfischbach/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"'
 
