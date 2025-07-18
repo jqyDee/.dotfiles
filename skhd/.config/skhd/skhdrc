@@ -1,6 +1,21 @@
+# MACOS
 # open some applications
 alt - return : osascript -e 'tell application "alacritty" to make new document'
 alt - j : osascript -e 'tell application "Safari" to make new document'
+
+# Nightshift
+ctrl + alt - n : shortcuts run "Nightshift on"
+ctrl + alt - m : shortcuts run "Nightshift off"
+
+# change external monitor scaling
+# uses displayplacer (https://github.com/jakehilborn/displayplacer)
+ctrl + alt + cmd - 1 : displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 mode:54" # Default Builtin Display
+ctrl + alt + cmd - 2 : displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 mode:66" # More Space Builtin Display
+ctrl + alt + cmd - 3 : displayplacer "id:1F2A4123-E789-4D9D-AC1D-F65A4FA1E6A3 mode:85" # Large Text LG Monitor
+ctrl + alt + cmd - 4 : displayplacer "id:1F2A4123-E789-4D9D-AC1D-F65A4FA1E6A3 mode:146" # More Space LG Monitor
+
+# MACOS END
+
 
 # change window focus within space
 ctrl - h : yabai -m window --focus west
@@ -59,14 +74,23 @@ shift + alt - c : yabai -m space --create
 shift + alt - d : yabai -m space --destroy
 
 # change focused space
-ctrl - 1 : yabai -m query --spaces --space 1 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 1
-ctrl - 2 : yabai -m query --spaces --space 2 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 2
-ctrl - 3 : yabai -m query --spaces --space 3 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 3
-ctrl - 4 : yabai -m query --spaces --space 4 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 4
-ctrl - 5 : yabai -m query --spaces --space 5 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 5
-ctrl - 6 : yabai -m query --spaces --space 6 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 6
-ctrl - 7 : yabai -m query --spaces --space 7 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 7
-ctrl - 8 : yabai -m query --spaces --space 8 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 8
+ctrl - 1 : yabai -m space --focus 1;
+ctrl - 2 : yabai -m space --focus 2;
+ctrl - 3 : yabai -m space --focus 3;
+ctrl - 4 : yabai -m space --focus 4;
+ctrl - 5 : yabai -m space --focus 5;
+ctrl - 6 : yabai -m space --focus 6;
+ctrl - 7 : yabai -m space --focus 7;
+ctrl - 8 : yabai -m space --focus 8;
+
+# ctrl - 1 : yabai -m query --spaces --space 1 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 1
+# ctrl - 2 : yabai -m query --spaces --space 2 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 2
+# ctrl - 3 : yabai -m query --spaces --space 3 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 3
+# ctrl - 4 : yabai -m query --spaces --space 4 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 4
+# ctrl - 5 : yabai -m query --spaces --space 5 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 5
+# ctrl - 6 : yabai -m query --spaces --space 6 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 6
+# ctrl - 7 : yabai -m query --spaces --space 7 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 7
+# ctrl - 8 : yabai -m query --spaces --space 8 | jq -r '.windows[0]' | xargs yabai -m window --focus ; yabai -m space --focus 8
 
 # move window to space
 ctrl + shift - 1 : yabai -m window --space 1;
@@ -77,13 +101,6 @@ ctrl + shift - 5 : yabai -m window --space 5;
 ctrl + shift - 6 : yabai -m window --space 6;
 ctrl + shift - 7 : yabai -m window --space 7;
 ctrl + shift - 8 : yabai -m window --space 8;
-
-# change external monitor scaling
-# uses displayplacer (https://github.com/jakehilborn/displayplacer)
-ctrl + alt + cmd - 1 : displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 mode:54" # Default Builtin Display
-ctrl + alt + cmd - 2 : displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 mode:66" # More Space Builtin Display
-ctrl + alt + cmd - 3 : displayplacer "id:1F2A4123-E789-4D9D-AC1D-F65A4FA1E6A3 mode:85" # Large Text LG Monitor
-ctrl + alt + cmd - 4 : displayplacer "id:1F2A4123-E789-4D9D-AC1D-F65A4FA1E6A3 mode:146" # More Space LG Monitor
 
 # -- Starting/Stopping/Restarting Yabai --
 

@@ -8,6 +8,10 @@ return {
     config = function()
       vim.cmd("let g:gruvbox_contrast_dark = 'hard'")
       vim.cmd("colorscheme gruvbox")
+
+      vim.api.nvim_set_hl(0, 'LineNrAbove', { fg='#665c54' })
+      vim.api.nvim_set_hl(0, 'LineNr', { fg='#fabd2f' })
+      vim.api.nvim_set_hl(0, 'LineNrBelow', { fg='#665c54' })
     end,
   },
   "nvim-lualine/lualine.nvim",

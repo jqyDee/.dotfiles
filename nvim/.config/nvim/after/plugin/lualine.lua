@@ -1,3 +1,5 @@
+return
+
 require('lualine').setup {
     options = {
         icons_enabled = true,
@@ -5,7 +7,7 @@ require('lualine').setup {
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
         disabled_filetypes = {
-            statusline = {},
+            statusline = {'typst'},
             winbar = {},
         },
         ignore_focus = {},

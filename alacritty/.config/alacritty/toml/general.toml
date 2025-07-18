@@ -12,7 +12,7 @@ color = "#ebdbb2"
 save_to_clipboard = true
 
 [cursor]
-blink_interval = 200
+blink_interval = 500
 blink_timeout = 100
 unfocused_hollow = true
 thickness = 0.20

@@ -45,8 +45,16 @@ require('lspconfig').clangd.setup({
           "--compile-commands-dir=." }
 })
 
+require('lspconfig').tinymist.setup({
+  settings = {
+      formatterMode = "typstyle",
+      semanticTokens = "disable"
+    }
+})
+
 require("mason").setup({})
 require("mason-lspconfig").setup({
+  automatic_installation = true,
   ensure_installed = {
   },
   handlers = {
