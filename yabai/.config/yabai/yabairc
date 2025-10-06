@@ -55,5 +55,10 @@ yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Calculator$" manage=off
 yabai -m rule --add app="^QuickTime Player$" manage=off
 yabai -m rule --add app="^OmniDiskSweeper$" manage=off
+yabai -m rule --add app="^Calendar$" manage=off
+
+# disable finder info windows
+yabai -m rule --add title="^Copy$" manage=off
+yabai -m rule --add title="^Trash$" manage=off
 
 echo "yabai configuration loaded..."

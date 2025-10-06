@@ -66,3 +66,4 @@ source ~/.config/zsh/.zsh_functions
 
 # starship
 eval "$(starship init zsh)"
+eval "$(direnv hook zsh)"

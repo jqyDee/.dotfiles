@@ -27,6 +27,9 @@ return {
   -- treesitter
   "nvim-treesitter/nvim-treesitter",
 
+  -- plenary (async compile)
+  "nvim-lua/plenary.nvim",
+
   -- lsp
   "williamboman/mason.nvim",
   "williamboman/mason-lspconfig.nvim",
