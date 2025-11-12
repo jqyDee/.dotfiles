@@ -1,7 +1,7 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-add_newline = false
+add_newline = true
 
 format = """\
   $time\
@@ -9,7 +9,7 @@ format = """\
   $directory\
   $git_branch\
   $git_status\
-  $character\
+  \n$character\
   """
 
 right_format = """\
@@ -19,42 +19,42 @@ right_format = """\
   """
 
 [time] 
-disabled = false
+disabled = true
 format = '[\[$time\]]($style) '
-style = 'bold white'
+style = 'white'
 
 [username]
-style_user = 'bold cyan'
-show_always = true
+style_user = '#a89984'
+show_always = false
 format = '[$user]($style):'
 
 [directory]
-truncation_length = 1
+truncation_length = 6
 truncation_symbol = '…/'
-truncate_to_repo = true
+truncate_to_repo = false
 format = '[$path]($style)[$read_only]($read_only_style) '
-style = 'bold green'
+style = '#a89984'
 disabled = false
 
 [character]
-success_symbol = '[\$](bold white)'
-error_symbol = '[\$](bold red)'
-vimcmd_symbol = '[VI](bold white)'
-vimcmd_replace_one_symbol = '[VI](bold blue)'
-vimcmd_replace_symbol = '[VI](bold red)'
-vimcmd_visual_symbol = '[VI](bold orange)'
+success_symbol = '[\$](white)'
+error_symbol = '[\$](red)'
+vimcmd_symbol = '[VI](white)'
+vimcmd_replace_one_symbol = '[VI](blue)'
+vimcmd_replace_symbol = '[VI](red)'
+vimcmd_visual_symbol = '[VI](orange)'
 
 [[battery.display]]
 threshold = 10
-style = "bold red"
+style = "red"
 
 [[battery.display]]
 threshold = 20
-style = "bold yellow"
+style = "yellow"
 
 [[battery.display]]
 threshold = 80
-style = "bold green"
+style = "green"
 
 [c]
 commands = [ [ 'gcc', '--version' ], [ 'cc', '--version' ], [ 'clang', '--version' ] ]
@@ -75,10 +75,10 @@ style = 'dimmed white'
 
 [git_branch]
 format = '[(\($remote_name:\))$branch]($style)'
-style = 'bold yellow'
+style = 'yellow'
 always_show_remote = true
 
 [git_status]
 format = '[\[$all_status$ahead_behind\]]($style) '
-style = 'bold #d65d0e'
+style = '#d65d0e'
 

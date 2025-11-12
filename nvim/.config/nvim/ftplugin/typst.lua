@@ -1,5 +1,5 @@
 vim.opt_local.spell = true
-vim.opt_local.spelllang = "de"
+vim.opt_local.spelllang = { "de", "en" }
 
 vim.opt_local.nu = false
 vim.opt_local.relativenumber = false
@@ -19,6 +19,12 @@ vim.keymap.set("n", "<leader>tt", function()
     '#show: generic.with(',
     '  title: "TODO"',
     ')'
+  }, "c", true, true)
+end, { desc = "Insert Typst TODO snippet" })
+
+vim.keymap.set("n", "<leader>td", function()
+  vim.api.nvim_put({
+    '#text("TODO", fill: red, weight: 900)',
   }, "c", true, true)
 end, { desc = "Insert Typst TODO snippet" })
 

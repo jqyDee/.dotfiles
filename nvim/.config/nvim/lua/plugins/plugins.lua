@@ -56,6 +56,17 @@ return {
   opts = {}, -- lazy.nvim will implicitly calls `setup {}`
   },
 
+  -- plantuml
+  {
+    "aklt/plantuml-syntax",
+    ft = { "plantuml" },
+  },
+  {
+    "weirongxu/plantuml-previewer.vim",
+    dependencies = { "tyru/open-browser.vim" },
+    ft = { "plantuml" },
+  },
+
   -- python
   {
     "nvimtools/none-ls.nvim",
