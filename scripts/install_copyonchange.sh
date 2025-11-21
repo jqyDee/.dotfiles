@@ -52,6 +52,7 @@ root = $SYNC_DEST
 # Exclude archive-cs folder and .DS_Store files
 ignore = Path archive-cs
 ignore = Name .DS_Store
+ignore = Path 25w_sofar_ps/swa-skeleton
 
 auto = true
 log = true
