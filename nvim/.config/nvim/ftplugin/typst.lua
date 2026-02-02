@@ -8,8 +8,6 @@ vim.opt_local.signcolumn = 'no'
 
 vim.opt_local.colorcolumn = ""
 
--- vim.opt_local.ft='rust'
-
 vim.keymap.set("n", "<leader>tt", function()
   vim.api.nvim_put({
     "// output: TODO.pdf",
@@ -27,6 +25,14 @@ vim.keymap.set("n", "<leader>td", function()
     '#text("TODO", fill: red, weight: 900)',
   }, "c", true, true)
 end, { desc = "Insert Typst TODO snippet" })
+
+vim.keymap.set("n", "<leader>ti", function()
+  vim.api.nvim_put({
+    '#align(center)[',
+    '  #image(./)',
+    ']'
+  }, "c", true, true)
+end, { desc = "Insert Typst image (centered)" })
 
 local function find_main_typst_file(filepath)
   local dir = vim.fn.fnamemodify(filepath, ":p:h") -- get file directory

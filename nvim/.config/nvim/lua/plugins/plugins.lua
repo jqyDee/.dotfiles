@@ -45,7 +45,12 @@ return {
   -- markdown
   {
     "OXY2DEV/markview.nvim",
-    lazy = false
+    lazy = false,
+    opts = {
+        preview = {
+            filetypes = { "markdown" },
+        }
+    }
   },
 
   -- typst

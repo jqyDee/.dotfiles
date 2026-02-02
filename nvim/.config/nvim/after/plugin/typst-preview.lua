@@ -5,7 +5,7 @@ require 'typst-preview'.setup {
 
   -- Custom format string to open the output link provided with %s
   -- Example: open_cmd = 'firefox %s -P typst-preview --class typst-preview'
-  open_cmd = 'firefox %s',
+  open_cmd = 'open -a "Firefox" %s',
 
   -- Custom port to open the preview server. Default is random.
   -- Example: port = 8000
