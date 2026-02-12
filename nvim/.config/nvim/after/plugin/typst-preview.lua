@@ -1,15 +1,23 @@
 require 'typst-preview'.setup {
   -- Setting this true will enable logging debug information to
   -- `vim.fn.stdpath 'data' .. '/typst-preview/log.txt'`
-  debug = false,
+  debug = true,
 
   -- Custom format string to open the output link provided with %s
   -- Example: open_cmd = 'firefox %s -P typst-preview --class typst-preview'
-  open_cmd = 'open -a "Firefox" %s',
+  -- open_cmd = 'firefox %s -P typst-preview --class typst-preview',
+  -- open_cmd = 'open -a "Firefox" %s',
+  open_cmd = nil, -- Uses system default browser
 
   -- Custom port to open the preview server. Default is random.
   -- Example: port = 8000
-  port = 6969,
+  port = 8000,
+
+  -- Custom host to bind the preview server to.
+  -- Note that '0.0.0.0' is not supported and [won'tbe]
+  -- (https://github.com/Myriad-Dreamin/tinymist/issues/2105)
+  -- Example: host = '192.168.0.10'
+  host = '127.0.0.1',
 
   -- Setting this to 'always' will invert black and white in the preview
   -- Setting this to 'auto' will invert depending if the browser has enable
