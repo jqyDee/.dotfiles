@@ -16,10 +16,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   # homebrew in path
   eval $(/opt/homebrew/bin/brew shellenv)
 
-  # haskell in Path
-  export PATH=$PATH:/Users/mfischbach/Developer/utils/haskell/
-  [ -f "/Users/mfischbach/.ghcup/env" ] && . "/Users/mfischbach/.ghcup/env"
-
   # rust first in Path
   export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
   export PATH="/Users/mfischbach/.cargo/bin:$PATH"
