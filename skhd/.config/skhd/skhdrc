@@ -1,11 +1,7 @@
-# MACOS
-# open some applications
-alt - return : osascript -e 'tell application "alacritty" to make new document'
-alt - j : osascript -e 'tell application "Safari" to make new document'
-
 # Nightshift
 ctrl + alt - n : shortcuts run "Nightshift on"
 ctrl + alt - m : shortcuts run "Nightshift off"
+fn - v : firefox
 
 # change external monitor scaling
 # uses displayplacer (https://github.com/jakehilborn/displayplacer)
@@ -110,4 +106,5 @@ shift + ctrl - u :  yabai -m window --toggle float && yabai -m window --toggle f
 ctrl + alt - q : yabai --stop-service
 ctrl + alt - s : yabai --start-service
 ctrl + alt - r : yabai --restart-service
+fn - r : yabai -m config focus_follows_mouse autofocus
 
