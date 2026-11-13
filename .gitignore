@@ -2,3 +2,6 @@
 *zcompdump*
 *history*
 *.log
+__pycache__/
+# udo's database must never land here (udo/.config/udo is stowed config only)
+udo.db*
