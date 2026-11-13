@@ -1,5 +1,6 @@
 # match terminal
 export BAT_THEME=gruvbox-dark
+export EDITOR=nvim
 
 # aliases
 # MACOS
@@ -10,6 +11,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   alias sshuni='ssh -X -l csbb8241 zid-gpl.uibk.ac.at'
   alias icloud='cd "/Users/mfischbach/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"'
   alias db='docker exec -it 25w_dbsys_ps-db-1 psql -U postgres -h db'
+  alias vpnuni='sudo openconnect -b vpn.uibk.ac.at'
 
   # homebrew in path
   eval $(/opt/homebrew/bin/brew shellenv)
@@ -20,6 +22,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
   # rust first in Path
   export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
+  export PATH="/Users/mfischbach/.cargo/bin:$PATH"
 
   # brew llvm in path
   export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
@@ -41,6 +44,9 @@ fi
 
 # gcc as c compiler
 export CC=gcc
+
+# docker cli completions (must be in fpath before compinit)
+fpath=(/Users/mfischbach/.docker/completions $fpath)
 
 # move annoying .zcompdump files into a better hidden directory
 autoload -Uz compinit
