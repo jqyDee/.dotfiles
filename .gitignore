@@ -8,3 +8,4 @@ udo.db*
 .zcompcache/
 .DS_STORE
 zed/.config/zed/prompts/
+zed/.config/zed/conversations/
