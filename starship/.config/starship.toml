@@ -9,6 +9,7 @@ format = """\
   $directory\
   $git_branch\
   $git_status\
+  $cmd_duration\
   \n$character\
   """
 
@@ -16,6 +17,7 @@ right_format = """\
   $c\
   $haskell\
   $python\
+  $typst\
   """
 
 [time] 
@@ -43,6 +45,11 @@ vimcmd_symbol = '[VI](white)'
 vimcmd_replace_one_symbol = '[VI](blue)'
 vimcmd_replace_symbol = '[VI](red)'
 vimcmd_visual_symbol = '[VI](orange)'
+
+[cmd_duration]
+min_time = 1
+show_milliseconds = true
+style = 'white'
 
 [[battery.display]]
 threshold = 10
@@ -81,4 +88,8 @@ always_show_remote = true
 [git_status]
 format = '[\[$all_status$ahead_behind\]]($style) '
 style = '#d65d0e'
+
+[typst]
+format = '$symbol[($version)]($style)'
+symbol = 'typst '
 
