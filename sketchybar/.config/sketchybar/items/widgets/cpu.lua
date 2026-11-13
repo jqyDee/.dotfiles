@@ -34,7 +34,9 @@ local cpu = sbar.add("graph", "widgets.cpu" , 42, {
 cpu:subscribe("cpu_update", function(env)
   -- Also available: env.user_load, env.sys_load
   local load = tonumber(env.total_load)
-  cpu:push({ load / 100. })
+
+  local scaled_load = math.min(1.0, load / 100.0) * 0.5
+  cpu:push({ scaled_load })
 
   local color = colors.blue
   if load > 30 then
