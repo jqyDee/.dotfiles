@@ -11,7 +11,7 @@ sandbox() {
     export HOME="$root/home" FAKE="$root/fake"
     export PATH="$TESTS/stubs:/usr/bin:/bin"
     export BREW="$TESTS/stubs/brew" STUB_LOG="$root/fake/calls.log"
-    export DOTFILES="$REPO" XCODE_WAIT=1
+    export DOTFILES="$REPO" XCODE_WAIT=1 XCODE_POLL=0
     unset XDG_STATE_HOME NO_BREW MODE
     mkdir -p "$HOME/.local/state/dotfiles" "$FAKE"
     touch "$HOME/.local/state/dotfiles/signin-done"
