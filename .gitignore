@@ -9,3 +9,4 @@ udo.db*
 .DS_Store
 zed/.config/zed/prompts/
 zed/.config/zed/conversations/
+docs
