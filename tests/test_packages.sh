@@ -4,7 +4,8 @@ bootstrap() { bash "$DOTFILES/bootstrap.sh" "$@"; }
 
 test_bundle_apply() {
     bootstrap --only bundle >/dev/null
-    assert_log_has "^brew bundle --file=$DOTFILES/Brewfile$"
+    # re-runs install what is missing; upgrading stays a separate `brew upgrade`
+    assert_log_has "^brew bundle --file=$DOTFILES/Brewfile --no-upgrade$"
 }
 
 test_bundle_failure_continues() {

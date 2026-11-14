@@ -6,7 +6,7 @@ step_bundle() {
     local brewfile="$DOTFILES/Brewfile" out line
 
     if [ "$MODE" = apply ]; then
-        "$BREW" bundle --file="$brewfile" && return 0
+        "$BREW" bundle --file="$brewfile" --no-upgrade && return 0
         note_failure "brew bundle (App Store signed in?)"
         return 1
     fi

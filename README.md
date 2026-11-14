@@ -43,7 +43,7 @@ Exit codes: `0` ok, `1` drift or a failed step, `2` stow conflict, `64` wrong us
 ## What bootstrap does
 1. Installs the Xcode command line tools and Homebrew if they are missing.
 2. First run only: waits until you have signed in to the App Store and iCloud (needed for `mas` and the Unison sync).
-3. `brew bundle` with the Brewfile. In `--check` mode it also lists installed packages that are not in the Brewfile; it never uninstalls anything.
+3. `brew bundle` with the Brewfile: installs what is missing, never upgrades (run `brew upgrade` yourself). In `--check` mode it also lists installed packages that are not in the Brewfile; it never uninstalls anything.
 4. Links every stow package. If a real file is in the way it stops before linking anything and prints the paths: move those files away and run it again. It never uses `--adopt`.
 5. Applies the settings in `macos.sh`. Only values that differ are written; Dock and Finder restart only if one of their settings changed. Keyboard, trackpad and menu bar settings need a log out.
 6. Extras: zsh plugins (`~/.zsh`), tpm (`~/.tmux/plugins/tpm`, then `prefix + I` in tmux), SbarLua and the sketchybar app font, the typst templates repo (`@local/templates`, needs a GitHub SSH key; skipped with a note otherwise), the udo-keyboard LaunchAgent.
