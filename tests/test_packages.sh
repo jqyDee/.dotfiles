@@ -50,3 +50,43 @@ test_brewfile_parses() {
         grep -qx "$e" "$DOTFILES/Brewfile" || fail "missing $e"
     done
 }
+
+PKGS="alacritty borders gh git ideavim nvim sketchybar skhd starship tmux udo yabai zed zsh"
+
+test_stow_conflict_aborts() {
+    fake stow stow 1 "WARNING! stowing zsh would cause conflicts:
+  * existing target is not owned by stow: .zshrc
+All operations aborted."
+    rc=0
+    out=$(bootstrap 2>&1) || rc=$?
+    assert_eq 2 "$rc" "return code"
+    assert_eq 1 "$(grep -c '^stow ' "$STUB_LOG")" "stow calls"
+    assert_log_has '^stow .*-n'
+    assert_log_lacks '^defaults '
+    assert_contains ".zshrc" "$out"
+}
+
+test_stow_uses_package_list() {
+    fake stow stow 0 "LINK: .tmux.conf => .dotfiles/tmux/.tmux.conf"
+    bootstrap --only stow >/dev/null
+    assert_log_has "^stow .* $PKGS$"
+    assert_log_lacks '^stow .*scripts'
+    assert_log_lacks '^stow .*-R'
+    assert_eq 2 "$(grep -c '^stow ' "$STUB_LOG")" "dry run + real run"
+}
+
+test_stow_nothing_to_link_skips_real_run() {
+    fake stow stow 0 "WARNING: in simulation mode so not modifying filesystem."
+    bootstrap --only stow >/dev/null
+    assert_eq 1 "$(grep -c '^stow ' "$STUB_LOG")" "only the dry run"
+}
+
+test_stow_check_reports_missing_links() {
+    fake stow stow 0 "LINK: .tmux.conf => .dotfiles/tmux/.tmux.conf
+WARNING: in simulation mode so not modifying filesystem."
+    rc=0
+    out=$(bootstrap --check --only stow) || rc=$?
+    assert_eq 1 "$rc" "return code"
+    assert_contains "not linked: .tmux.conf" "$out"
+    assert_eq 1 "$(grep -c '^stow ' "$STUB_LOG")" "only the dry run"
+}

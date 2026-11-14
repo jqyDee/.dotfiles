@@ -27,7 +27,7 @@ test_only_runs_one_step() {
 test_step_order() {
     bootstrap >/dev/null || true
     prev=0
-    for re in '^xcode-select' '^brew shellenv' '^brew bundle' '^defaults '; do
+    for re in '^xcode-select' '^brew shellenv' '^brew bundle' '^stow ' '^defaults '; do
         n=$(first_line "$re")
         [ -n "$n" ] || fail "no log line for $re"
         [ "$n" -gt "$prev" ] || fail "$re (line $n) ran before line $prev"
