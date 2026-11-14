@@ -3,6 +3,9 @@ vim.g.mapleader = " "
 -- open netrw
 vim.keymap.set("n", "<leader>pv", "<cmd>Ex<CR>")
 
+-- open tree view
+vim.keymap.set("n", "<leader>tv", "<cmd>NvimTreeToggle<CR>")
+
 -- move selected block up/down
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")

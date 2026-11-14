@@ -1,12 +1,14 @@
 vim.opt_local.spell = true
 vim.opt_local.spelllang = { "de", "en" }
 
-vim.opt_local.nu = false
-vim.opt_local.relativenumber = false
-
 vim.opt_local.signcolumn = 'no'
 
 vim.opt_local.colorcolumn = ""
+
+-- get back gq as just line wrapping. This is a stupid fix in tinymist
+vim.opt_local.textwidth = 80
+vim.opt_local.formatoptions:remove({ "t", "c" })
+vim.keymap.set({ "n", "x" }, "gq", "gw", { buffer = true, remap = false })
 
 vim.keymap.set("n", "<leader>tt", function()
   vim.api.nvim_put({

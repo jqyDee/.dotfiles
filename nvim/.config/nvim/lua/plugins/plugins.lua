@@ -61,20 +61,23 @@ return {
   opts = {}, -- lazy.nvim will implicitly calls `setup {}`
   },
 
-  -- plantuml
-  {
-    "aklt/plantuml-syntax",
-    ft = { "plantuml" },
-  },
-  {
-    "weirongxu/plantuml-previewer.vim",
-    dependencies = { "tyru/open-browser.vim" },
-    ft = { "plantuml" },
-  },
-
   -- python
   {
     "nvimtools/none-ls.nvim",
      dependencies = { 'nvim-lua/plenary.nvim' },
+  },
+
+  -- tree sidebar
+  {
+  "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+
+  -- latex
+  {
+    "lervag/vimtex",
+    lazy = false, -- VimTeX should not be lazy-loaded
   }
 }

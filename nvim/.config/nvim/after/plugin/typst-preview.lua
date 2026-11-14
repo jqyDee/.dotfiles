@@ -5,13 +5,13 @@ require 'typst-preview'.setup {
 
   -- Custom format string to open the output link provided with %s
   -- Example: open_cmd = 'firefox %s -P typst-preview --class typst-preview'
-  -- open_cmd = 'firefox %s -P typst-preview --class typst-preview',
-  -- open_cmd = 'open -a "Firefox" %s',
-  open_cmd = nil, -- Uses system default browser
+  open_cmd = 'firefox %s -P typst-preview --class typst-preview',
+  open_cmd = 'open -a "Firefox" %s',
+  -- open_cmd = nil, -- Uses system default browser
 
   -- Custom port to open the preview server. Default is random.
   -- Example: port = 8000
-  port = 8000,
+  port = 6969,
 
   -- Custom host to bind the preview server to.
   -- Note that '0.0.0.0' is not supported and [won'tbe]

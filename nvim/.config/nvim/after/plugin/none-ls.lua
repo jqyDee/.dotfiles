@@ -7,8 +7,8 @@ null_ls.setup({
     null_ls.builtins.formatting.black,
   },
   on_attach = function(client, bufnr)
-    local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
-    if client.supports_method("textDocument/formatting") and filetype == "python" then
+    local filetype = vim.bo[bufnr].filetype
+    if client:supports_method("textDocument/formatting") and filetype == "python" then
       vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
       vim.api.nvim_create_autocmd("BufWritePre", {
         group = augroup,
