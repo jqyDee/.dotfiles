@@ -6,6 +6,6 @@ __pycache__/
 # udo's database must never land here (udo/.config/udo is stowed config only)
 udo.db*
 .zcompcache/
-.DS_STORE
+.DS_Store
 zed/.config/zed/prompts/
 zed/.config/zed/conversations/
