@@ -27,6 +27,8 @@ brew "lcov"
 brew "lua"
 # Package manager for the Lua programming language
 brew "luarocks"
+# Mac App Store command-line interface
+brew "mas"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
@@ -73,6 +75,8 @@ cask "adguard"
 cask "alacritty"
 # Terminal interface for Antigravity agents
 cask "antigravity-cli"
+# Anthropic's official Claude AI desktop app
+cask "claude"
 # Terminal-based AI coding assistant
 cask "claude-code"
 # App to build and share containerised applications and microservices
@@ -90,6 +94,8 @@ cask "intellij-idea"
 cask "jordanbaird-ice"
 # Full TeX Live distribution with GUI applications
 cask "mactex"
+# Sandbox construction video game
+cask "minecraft"
 # VPN client for secure internet access and private browsing
 cask "nordvpn"
 # Control your tools with a few keystrokes
@@ -106,6 +112,8 @@ cask "soulseek"
 cask "spotify"
 # Mesh VPN based on WireGuard
 cask "tailscale-app"
+# Remote access and connectivity software focused on security
+cask "teamviewer"
 # Tool to invert scroll direction for physical scroll wheels
 cask "unnaturalscrollwheels"
 # Native desktop client for WhatsApp
@@ -122,3 +130,5 @@ cargo "cargo-dist"
 cargo "cargo-llvm-cov"
 cargo "cargo-release"
 cargo "git-cliff"
+mas "Noir", id: 1592917505
+mas "Xcode", id: 497799835
