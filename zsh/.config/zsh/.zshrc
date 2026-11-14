@@ -23,9 +23,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   # brew llvm in path
   export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 
-  # java in path
-  export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/homebrew/lib
   export C_INCLUDE_PATH=$C_INCLUDE_PATH:/opt/homebrew/include
 
