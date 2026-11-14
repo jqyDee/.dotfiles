@@ -72,3 +72,22 @@ test_brew_install_attempt() {
     assert_eq 1 "$rc" "return code"
     assert_log_has '^curl .*Homebrew/install/HEAD/install.sh'
 }
+
+test_rerun_is_noop() {
+    # a fully set-up machine: settings applied, extras present, links in
+    # place (stow dry run lists nothing), services running
+    bootstrap --only macos >/dev/null
+    all_extras_present
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    mkdir -p "$HOME/Library/LaunchAgents"
+    touch "$HOME/Library/LaunchAgents/com.koekeishiya.skhd.plist"
+    : >"$STUB_LOG"
+
+    bootstrap >/dev/null
+    for re in '^defaults write' '^killall' '^git clone' '^curl' '^make' \
+        'services start' '^skhd' '^xcode-select --install' '^ssh'; do
+        assert_log_lacks "$re"
+    done
+    assert_eq 1 "$(grep -c '^stow ' "$STUB_LOG")" "only the stow dry run"
+}

@@ -21,74 +21,54 @@ Every top-level folder (except `scripts/`) is a stow package that mirrors `$HOME
 | `zsh` | `~/.zshenv`, `~/.config/zsh` | zsh (`ZDOTDIR` is set to `~/.config/zsh`) |
 
 Not a package:
-- `Brewfile`: everything installed through Homebrew, cargo and npm
+- `bootstrap.sh`, `macos.sh`, `lib/`: the setup scripts (below)
+- `Brewfile`: everything installed through Homebrew, the App Store (`mas`), cargo and npm
 - `scripts/`: installer for the Unison iCloud sync (`install_copyonchange.sh` / `uninstall_copyonchange.sh`)
+- `tests/`: tests for the setup scripts (`bash tests/run.sh`); they run against fakes and never touch the machine
 
 ## Installation
-1. Install the Xcode command line tools and [Homebrew](https://brew.sh):
-```
-xcode-select --install
-```
-2. Clone the repo into `$HOME`:
 ```
 git clone https://github.com/jqyDee/.dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
+~/.dotfiles/bootstrap.sh
 ```
-3. Install the software:
-```
-brew bundle --file=~/.dotfiles/Brewfile
-```
-4. Link the packages. Name them explicitly; `stow */` would also link `scripts/` into `$HOME`.
-```
-stow alacritty borders gh git ideavim nvim sketchybar skhd starship tmux udo yabai zed zsh
-```
-If stow reports a conflict, a real file is already in the way. Move it away (or use `stow --adopt <pkg>` and check `git diff` afterwards).
+On a fresh Mac `git` itself triggers the Xcode command line tools installer; let it finish, then run the two lines again.
+
+`bootstrap.sh` is safe to re-run: every step skips work that is already done.
+- `./bootstrap.sh --check` changes nothing and lists where the Mac differs from the repo: missing or extra packages, missing links, settings with other values, missing extras. Run this first on a Mac that is already set up.
+- `./bootstrap.sh --only <step>` runs one step: `xcode brew signin bundle stow macos extras services`.
+- `./macos.sh [--check]` applies (or checks) only the macOS settings.
+
+Exit codes: `0` ok, `1` drift or a failed step, `2` stow conflict, `64` wrong usage.
+
+## What bootstrap does
+1. Installs the Xcode command line tools and Homebrew if they are missing.
+2. First run only: waits until you have signed in to the App Store and iCloud (needed for `mas` and the Unison sync).
+3. `brew bundle` with the Brewfile. In `--check` mode it also lists installed packages that are not in the Brewfile; it never uninstalls anything.
+4. Links every stow package. If a real file is in the way it stops before linking anything and prints the paths: move those files away and run it again. It never uses `--adopt`.
+5. Applies the settings in `macos.sh`. Only values that differ are written; Dock and Finder restart only if one of their settings changed. Keyboard, trackpad and menu bar settings need a log out.
+6. Extras: zsh plugins (`~/.zsh`), tpm (`~/.tmux/plugins/tpm`, then `prefix + I` in tmux), SbarLua and the sketchybar app font, the typst templates repo (`@local/templates`, needs a GitHub SSH key; skipped with a note otherwise), the udo-keyboard LaunchAgent.
+7. Starts the sketchybar, borders and skhd services.
+
+The sketchybar event providers in `helpers/` are compiled on every start (`helpers/init.lua` runs `make`).
 
 ## Manual steps
-Things the Brewfile and stow do not cover.
+### Permissions
+yabai, skhd and sketchybar ask for Accessibility / Screen Recording access when they first start. Grant it in System Settings.
 
 ### yabai
 Not in the Brewfile: installed as a pre-built binary into `/usr/local/bin`, following the [yabai wiki](https://github.com/koekeishiya/yabai/wiki).
 `yabairc` loads the scripting addition (`sudo yabai --load-sa`), which needs SIP partially disabled and a sudoers entry in `/private/etc/sudoers.d/yabai` (see the wiki). Then:
 ```
 yabai --start-service
-skhd --start-service
 ```
+(To be replaced by AeroSpace.)
 
-### sketchybar
-The Lua config needs SbarLua and the app icon font:
-```
-git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && (cd /tmp/SbarLua && make install) && rm -rf /tmp/SbarLua
-curl -L https://github.com/kvndrsslr/sketchybar-app-font/releases/latest/download/sketchybar-app-font.ttf -o ~/Library/Fonts/sketchybar-app-font.ttf
-brew services start sketchybar
-brew services start borders
-```
-The CPU and network event providers in `helpers/` are compiled on every start (`helpers/init.lua` runs `make`, which needs the Xcode command line tools).
+### Unison sync
+After signing in to iCloud: `~/.dotfiles/scripts/install_copyonchange.sh`.
 
-### zsh plugins
-`.zshrc` sources these from `~/.zsh`:
-```
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
-```
-
-### tmux plugins
-```
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-```
-Then start tmux and press `prefix + I`.
-
-### Typst templates
-The udo typst template imports `@local/templates`, which lives in its own repo:
-```
-git clone git@github.com:jqyDee/typst-templates.git ~/Library/Application\ Support/typst/packages/local
-```
-
-### udo keyboard
-```
-~/.config/udo-keyboard/install.sh
-```
-Creates a venv in `~/.local/share/udo-keyboard` and installs the `local.corne.udo-status` LaunchAgent.
+## Not managed
+- Cemu and WiiUDownloader: no Homebrew casks, download them by hand.
+- Microsoft Office: installed outside the Brewfile.
 
 ## Not tracked
 - udo data (`~/.config/udo`: `.udo.toml`, `view.toml`, `udo.db*`). The run scripts and templates follow once udo's data dir is split from its config.

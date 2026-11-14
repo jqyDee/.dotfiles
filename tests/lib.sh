@@ -59,3 +59,14 @@ fake() {
     echo "$3" >"$FAKE/$1/$2.rc"
     if [ $# -ge 4 ]; then printf '%s\n' "$4" >"$FAKE/$1/$2.out"; fi
 }
+
+TYPST_DIR='Library/Application Support/typst/packages/local'
+
+# every extras target present, udo-keyboard agent loaded (launchctl rc 0)
+all_extras_present() {
+    mkdir -p "$HOME/.zsh/zsh-autosuggestions" "$HOME/.zsh/zsh-syntax-highlighting" \
+        "$HOME/.tmux/plugins/tpm" "$HOME/.local/share/sketchybar_lua" \
+        "$HOME/Library/Fonts" "$HOME/$TYPST_DIR"
+    touch "$HOME/.local/share/sketchybar_lua/sketchybar.so" \
+        "$HOME/Library/Fonts/sketchybar-app-font.ttf"
+}
