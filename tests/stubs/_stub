@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Fake for an external tool, invoked through a symlink named after the tool.
+# Logs "<tool> <args>" to $STUB_LOG. Exit code and output come from
+# $FAKE/<tool>/<key>.rc and .out (default: exit 0, no output).
+set -u
+
+tool=$(basename "$0")
+echo "$tool $*" >>"$STUB_LOG"
+
+key=$tool
+if [ "$tool" = brew ]; then
+    key=${1:-brew}
+    if [ $# -ge 2 ] && [ "${2#-}" = "$2" ]; then key="$1-$2"; fi
+fi
+
+if [ "$tool" = defaults ]; then
+    dir="$FAKE/defaults/${2:-}"
+    case "${1:-}" in
+    read)
+        [ -f "$dir/$3" ] || {
+            echo "The domain/default pair of ($2, $3) does not exist" >&2
+            exit 1
+        }
+        cut -d' ' -f2- "$dir/$3"
+        ;;
+    read-type)
+        [ -f "$dir/$3" ] || exit 1
+        echo "Type is $(cut -d' ' -f1 "$dir/$3")"
+        ;;
+    write)
+        mkdir -p "$dir"
+        case "$4" in
+        -bool) case "$5" in true | yes | 1) v=1 ;; *) v=0 ;; esac; t=boolean ;;
+        -int) v=$5 t=integer ;;
+        -float) v=$5 t=float ;;
+        *) v=$5 t=string ;;
+        esac
+        echo "$t $v" >"$dir/$3"
+        ;;
+    esac
+    exit 0
+fi
+
+rc=0
+[ -f "$FAKE/$tool/$key.rc" ] && rc=$(cat "$FAKE/$tool/$key.rc")
+[ -f "$FAKE/$tool/$key.out" ] && cat "$FAKE/$tool/$key.out"
+
+if [ "$rc" -eq 0 ]; then
+    case "$tool" in
+    git) [ "${1:-}" = clone ] && mkdir -p "${!#}" ;;
+    curl)
+        prev=
+        for a in "$@"; do
+            if [ "$prev" = -o ]; then mkdir -p "$(dirname "$a")" && touch "$a"; fi
+            prev=$a
+        done
+        ;;
+    esac
+fi
+exit "$rc"
