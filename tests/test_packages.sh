@@ -90,3 +90,9 @@ WARNING: in simulation mode so not modifying filesystem."
     assert_contains "not linked: .tmux.conf" "$out"
     assert_eq 1 "$(grep -c '^stow ' "$STUB_LOG")" "only the dry run"
 }
+
+test_bundle_check_ignores_outdated() {
+    # without --no-upgrade, brew counts every outdated package as missing
+    bootstrap --check --only bundle >/dev/null
+    assert_log_has '^brew bundle check .*--no-upgrade'
+}

@@ -11,7 +11,7 @@ step_bundle() {
         return 1
     fi
 
-    if ! out=$("$BREW" bundle check --file="$brewfile" --verbose 2>&1); then
+    if ! out=$("$BREW" bundle check --file="$brewfile" --no-upgrade --verbose 2>&1); then
         while IFS= read -r line; do
             case $line in "→ "*) note_drift "missing: ${line#→ }" ;; esac
         done <<<"$out"
