@@ -24,6 +24,8 @@ brew "gh"
 brew "gnupg"
 # Graphical front-end for GCC's coverage testing tool (gcov)
 brew "lcov"
+# LLVM Project Linker
+brew "lld"
 # Next-gen compiler infrastructure
 brew "llvm"
 # Powerful, lightweight programming language
