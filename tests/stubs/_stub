@@ -27,6 +27,25 @@ if [ "$tool" = defaults ]; then
         [ -f "$dir/$3" ] || exit 1
         echo "Type is $(cut -d' ' -f1 "$dir/$3")"
         ;;
+    domains)
+        # plists under $FAKE/plists/<domain>.plist (NSGlobalDomain isn't listed by the real one)
+        for f in "$FAKE"/plists/*.plist; do
+            [ -e "$f" ] || continue
+            d=$(basename "$f" .plist)
+            d=${d%.after}
+            [ "$d" = NSGlobalDomain ] || printf '%s\n' "$d"
+        done | sort -u | paste -sd ',' - | sed 's/,/, /g'
+        ;;
+    export)
+        # first export of a domain copies <domain>.plist, later ones <domain>.after.plist if present
+        src="$FAKE/plists/$2.plist"
+        if [ -e "$FAKE/plists/.exported-$2" ] && [ -e "$FAKE/plists/$2.after.plist" ]; then
+            src="$FAKE/plists/$2.after.plist"
+        fi
+        touch "$FAKE/plists/.exported-$2"
+        [ -e "$src" ] || exit 1
+        cp "$src" "$3"
+        ;;
     write)
         mkdir -p "$dir"
         case "$4" in

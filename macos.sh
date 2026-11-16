@@ -3,6 +3,8 @@
 #
 #   ~/.dotfiles/macos.sh           apply the settings below
 #   ~/.dotfiles/macos.sh --check   only show what differs
+#   ~/.dotfiles/macos.sh --record  change something in System Settings, get
+#                                  the matching `setting` lines (reads only)
 #
 # A setting is only written when its current value differs. Dock and Finder
 # are restarted once at the end, and only if one of their settings changed.
@@ -95,15 +97,43 @@ step_macos() {
     fi
 }
 
+# _macos_snapshot <dir>: export every defaults domain into <dir>/<domain>.plist
+_macos_snapshot() {
+    local d
+    mkdir -p "$1"
+    { echo NSGlobalDomain && defaults domains | tr ',' '\n'; } | sed 's/^ *//;/^$/d' |
+        while IFS= read -r d; do
+            defaults export "$d" "$1/$d.plist" 2>/dev/null || true
+        done
+}
+
+# macos_record: print the settings that change while you wait at the prompt
+macos_record() {
+    local tmp rc=0
+    tmp=$(mktemp -d)
+    _macos_snapshot "$tmp/before"
+    printf 'Change the settings now, then press Enter. ' >&2
+    read -r _ || true
+    _macos_snapshot "$tmp/after"
+    python3 "$_MACOS_DIR/lib/defaults_diff.py" "$tmp/before" "$tmp/after" "$_MACOS_DIR/macos.sh" || rc=$?
+    rm -rf "$tmp"
+    return "$rc"
+}
+
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
     set -euo pipefail
+    _MACOS_DIR=$(cd "$(dirname "$0")" && pwd)
     # shellcheck source=lib/common.sh
-    . "$(cd "$(dirname "$0")" && pwd)/lib/common.sh"
+    . "$_MACOS_DIR/lib/common.sh"
     case ${1:-} in
     --check) MODE=check ;;
+    --record)
+        macos_record
+        exit
+        ;;
     "") ;;
     *)
-        echo "usage: $0 [--check]" >&2
+        echo "usage: $0 [--check | --record]" >&2
         exit 64
         ;;
     esac

@@ -38,6 +38,7 @@ On a fresh Mac `git` itself triggers the Xcode command line tools installer; let
 - `./bootstrap.sh --check` changes nothing and lists where the Mac differs from the repo: missing or extra packages, missing links, settings with other values, missing extras. Run this first on a Mac that is already set up.
 - `./bootstrap.sh --only <step>` runs one step: `xcode brew signin bundle stow macos extras services`.
 - `./macos.sh [--check]` applies (or checks) only the macOS settings.
+- `./macos.sh --record` finds the keys behind a System Settings toggle: it snapshots all `defaults` domains, waits while you change something, then prints ready-to-paste `setting` lines for `macos.sh` (lists and dictionaries are shown as `# manual`). It only reads.
 - `./bootstrap.sh --save-local [name...]` moves packages you installed by hand into `Brewfile.local` (all of them, or only the named ones), so `--check` stops reporting them.
 
 ### Machine-local packages
