@@ -1,0 +1,33 @@
+# Slim Brewfile for testing bootstrap.sh in a fresh macOS VM: only what the
+# configs in this repo need, no big apps, no cargo, no App Store.
+#   cp tests/Brewfile.vm Brewfile && ./bootstrap.sh   (inside the VM only)
+
+tap "asmvik/formulae"
+tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae"
+tap "jqydee/tap", trusted: true
+tap "nikitabobko/tap"
+
+# configs and shell
+brew "stow"
+brew "starship"
+brew "tmux"
+brew "neovim"
+brew "ripgrep"
+brew "gh"
+
+# sketchybar (Lua config) and its widgets, skhd hotkeys
+brew "lua"
+brew "switchaudio-osx"
+brew "displayplacer"
+brew "asmvik/formulae/skhd", trusted: true
+brew "felixkratz/formulae/borders", trusted: true
+brew "felixkratz/formulae/sketchybar", trusted: true
+
+# udo-keyboard calls `udo status`
+brew "jqydee/tap/udo"
+
+cask "nikitabobko/tap/aerospace", trusted: true
+cask "alacritty"
+cask "font-hack-nerd-font"
+cask "font-sf-mono"
+cask "font-sf-pro"
