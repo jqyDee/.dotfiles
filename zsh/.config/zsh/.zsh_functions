@@ -19,3 +19,22 @@ copyuni() {
   fi
 }
 
+# TODO: remove when chosen which wm to go with
+# function to switch window manager between aerospace and yabai (+ skhd)
+switchwm() {
+  if pgrep -x AeroSpace > /dev/null; then
+    echo "Switching AeroSpace -> yabai"
+    osascript -e 'quit app "AeroSpace"'
+    yabai --start-service
+    skhd --start-service
+  elif pgrep -x yabai > /dev/null; then
+    echo "Switching yabai -> AeroSpace"
+    yabai --stop-service
+    skhd --stop-service
+    open -a AeroSpace
+  else
+    echo "No window manager running, starting AeroSpace"
+    open -a AeroSpace
+  fi
+}
+

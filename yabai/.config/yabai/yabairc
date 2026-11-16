@@ -58,4 +58,7 @@ yabai -m rule --add app="^Calendar$" manage=off
 yabai -m rule --add title="^Copy$" manage=off
 yabai -m rule --add title="^Trash$" manage=off
 
+# sketchybar picks its spaces representation at load, so reload once yabai runs
+sketchybar --reload
+
 echo "yabai configuration loaded..."

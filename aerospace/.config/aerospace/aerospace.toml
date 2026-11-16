@@ -1,0 +1,201 @@
+# Config version for compatibility and deprecations
+# See: https://nikitabobko.github.io/AeroSpace/guide#config-version
+config-version = 2
+
+# You can use it to add commands that run after AeroSpace startup.
+# Available commands : https://nikitabobko.github.io/AeroSpace/commands
+after-startup-command = [
+    # sketchybar picks its spaces representation at load, so reload once AeroSpace runs
+    'exec-and-forget /opt/homebrew/bin/sketchybar --reload',
+]
+
+# Notify sketchybar about workspace and window/focus changes
+exec-on-workspace-change = ['/bin/bash', '-c', '/opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change']
+on-focus-changed = ['exec-and-forget /opt/homebrew/bin/sketchybar --trigger aerospace_windows_change']
+
+# Start AeroSpace at login
+start-at-login = true
+
+# Automatically reload the config when the config file is saved
+auto-reload-config = true
+
+# Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# See: https://nikitabobko.github.io/AeroSpace/guide#layouts
+accordion-padding = 30
+
+# Possible values: tiles|accordion
+default-root-container-layout = 'tiles'
+
+# Possible values: horizontal|vertical|auto
+default-root-container-orientation = 'auto'
+
+# Mouse follows focus when focused monitor changes
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# Turn off macOS "Hide application" (cmd-h)
+automatically-unhide-macos-hidden-apps = true
+
+# Workspaces that stay alive even when empty
+persistent-workspaces = ["1", "2", "3", "4", "5", "6"]
+
+# A callback that runs every time binding mode changes
+on-mode-changed = []
+
+# yabai: focus_follows_mouse autoraise
+focus-follows-mouse.enabled = true
+
+key-mapping.preset = 'qwerty'
+
+# yabai: window_gap 2, padding 2, external_bar all:40:0
+# Built-in: macOS already reserves 38pt at the top (notch/menubar strip), so 38 + 4 = 42
+# External: nothing reserved, so 42 = sketchybar 40 + 2 padding
+gaps.inner.horizontal = 2
+gaps.inner.vertical =   2
+gaps.outer.left =       2
+gaps.outer.bottom =     2
+gaps.outer.top =        [{ monitor."built-in" = 4 }, 42]
+gaps.outer.right =      2
+
+# Make homebrew binaries (displayplacer, ...) available to exec-and-forget
+[exec]
+    inherit-env-vars = true
+[exec.env-vars]
+    PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
+
+# 1-5 on the main display (System Settings > Displays > "Use as main display"),
+# 6 on the secondary display, falls back to main when only one display is connected
+[workspace-to-monitor-force-assignment]
+    1 = 'main'
+    2 = 'main'
+    3 = 'main'
+    4 = 'main'
+    5 = 'main'
+    6 = ['secondary', 'main']
+
+[mode.main.binding]
+
+    # -- macOS --
+
+    # Nightshift
+    ctrl-alt-n = 'exec-and-forget shortcuts run "Nightshift on"'
+    ctrl-alt-m = 'exec-and-forget shortcuts run "Nightshift off"'
+
+    # change display scaling (displayplacer)
+    ctrl-alt-cmd-1 = 'exec-and-forget displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 mode:54"'  # Default Builtin Display
+    ctrl-alt-cmd-2 = 'exec-and-forget displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 mode:66"'  # More Space Builtin Display
+    ctrl-alt-cmd-3 = 'exec-and-forget displayplacer "id:1F2A4123-E789-4D9D-AC1D-F65A4FA1E6A3 mode:85"'  # Large Text LG Monitor
+    ctrl-alt-cmd-4 = 'exec-and-forget displayplacer "id:1F2A4123-E789-4D9D-AC1D-F65A4FA1E6A3 mode:146"' # More Space LG Monitor
+
+    # -- Layout --
+
+    alt-slash = 'layout tiles horizontal vertical'
+
+    # toggle window float
+    alt-shift-space = 'layout floating tiling'
+
+    # maximize a window
+    alt-shift-m = 'fullscreen'
+
+    # -- Focus --
+
+    ctrl-h = 'focus left'
+    ctrl-j = 'focus down'
+    ctrl-k = 'focus up'
+    ctrl-l = 'focus right'
+
+    # -- Size --
+
+    ctrl-cmd-h = 'resize width -80'
+    ctrl-cmd-j = 'resize height +80'
+    ctrl-cmd-k = 'resize height -80'
+    ctrl-cmd-l = 'resize width +80'
+    alt-minus = 'resize smart -50'
+    alt-equal = 'resize smart +50'
+
+    # -- Moving windows --
+
+    # swap windows
+    alt-shift-h = 'move left'
+    alt-shift-j = 'move down'
+    alt-shift-k = 'move up'
+    alt-shift-l = 'move right'
+
+    # move window and split (yabai warp)
+    ctrl-alt-h = 'join-with left'
+    ctrl-alt-j = 'join-with down'
+    ctrl-alt-k = 'join-with up'
+    ctrl-alt-l = 'join-with right'
+
+    # reset layout (undo join-with splits)
+    ctrl-shift-u = ['flatten-workspace-tree', 'layout tiles']
+
+    # -- Workspaces --
+
+    ctrl-1 = 'workspace 1'
+    ctrl-2 = 'workspace 2'
+    ctrl-3 = 'workspace 3'
+    ctrl-4 = 'workspace 4'
+    ctrl-5 = 'workspace 5'
+    ctrl-6 = 'workspace 6'
+
+    ctrl-shift-1 = 'move-node-to-workspace 1'
+    ctrl-shift-2 = 'move-node-to-workspace 2'
+    ctrl-shift-3 = 'move-node-to-workspace 3'
+    ctrl-shift-4 = 'move-node-to-workspace 4'
+    ctrl-shift-5 = 'move-node-to-workspace 5'
+    ctrl-shift-6 = 'move-node-to-workspace 6'
+
+    alt-tab = 'workspace-back-and-forth'
+    alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+    # -- Start/Stop/Reload AeroSpace --
+
+    ctrl-alt-q = 'enable off'
+    ctrl-alt-s = 'enable on'
+    ctrl-alt-r = 'reload-config'
+
+    alt-shift-semicolon = 'mode service'
+
+[mode.service.binding]
+    esc = ['reload-config', 'mode main']
+    r = ['flatten-workspace-tree', 'mode main'] # reset layout
+    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
+    backspace = ['close-all-windows-but-current', 'mode main']
+
+    alt-shift-h = ['join-with left', 'mode main']
+    alt-shift-j = ['join-with down', 'mode main']
+    alt-shift-k = ['join-with up', 'mode main']
+    alt-shift-l = ['join-with right', 'mode main']
+
+# -- Unmanaged apps (yabai manage=off) --
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.systempreferences'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.calculator'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.QuickTimePlayerX'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.omnigroup.OmniDiskSweeper'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.iCal'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.window-title-regex-substring = '^Copy$'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.window-title-regex-substring = '^Trash$'
+    run = 'layout floating'

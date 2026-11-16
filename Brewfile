@@ -2,6 +2,7 @@ tap "asmvik/formulae"
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae"
 tap "hashicorp/tap"
 tap "jqydee/tap", trusted: true
+tap "nikitabobko/tap"
 
 # OS-independent implementation of the ACPI specification
 brew "acpica"
@@ -69,6 +70,8 @@ brew "hashicorp/tap/terraform", trusted: true
 brew "jqydee/tap/udo"
 # Stand alone ad blocker
 cask "adguard"
+# AeroSpace is an i3-like tiling window manager for macOS
+cask "nikitabobko/tap/aerospace", trusted: true
 # GPU-accelerated terminal emulator
 cask "alacritty"
 # Terminal interface for Antigravity agents
