@@ -101,6 +101,5 @@ step_services() {
         fi
     fi
 
-    note_followup "yabai: manual install, see README (until AeroSpace)"
     return "$failed"
 }

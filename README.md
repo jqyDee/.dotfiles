@@ -5,7 +5,7 @@ Every top-level folder (except `scripts/`, `lib/`, `tests/`) is a stow package t
 ## Packages
 | Package | Links to | What |
 |---|---|---|
-| `aerospace` | `~/.config/aerospace` | AeroSpace tiling window manager (trial, replacing yabai) |
+| `aerospace` | `~/.config/aerospace` | AeroSpace tiling window manager (default) |
 | `alacritty` | `~/.config/alacritty` | terminal (Gruvbox Material) |
 | `borders` | `~/.config/borders` | JankyBorders window borders |
 | `gh` | `~/.config/gh` | GitHub CLI config (token lives in the keychain) |
@@ -17,7 +17,7 @@ Every top-level folder (except `scripts/`, `lib/`, `tests/`) is a stow package t
 | `starship` | `~/.config/starship.toml` | prompt |
 | `tmux` | `~/.tmux.conf` | tmux with a hand-rolled gruvbox status line |
 | `udo` | `~/.config/udo-keyboard` | feeds `udo status` to the Corne keyboard display |
-| `yabai` | `~/.config/yabai` | tiling window manager |
+| `yabai` | `~/.config/yabai` | tiling window manager (optional alternative, see below) |
 | `zed` | `~/.config/zed` | Zed editor |
 | `zsh` | `~/.zshenv`, `~/.config/zsh` | zsh (`ZDOTDIR` is set to `~/.config/zsh`) |
 
@@ -59,15 +59,14 @@ The sketchybar event providers in `helpers/` are compiled on every start (`helpe
 
 ## Manual steps
 ### Permissions
-yabai, skhd and sketchybar ask for Accessibility / Screen Recording access when they first start. Grant it in System Settings.
+AeroSpace, skhd and sketchybar (and yabai, if installed) ask for Accessibility / Screen Recording access when they first start. Grant it in System Settings.
 
-### yabai
-Not in the Brewfile: installed as a pre-built binary into `/usr/local/bin`, following the [yabai wiki](https://github.com/koekeishiya/yabai/wiki).
+### yabai (optional)
+AeroSpace is the default; sketchybar works with either (`switchwm` in zsh switches). yabai is not in the Brewfile: installed as a pre-built binary into `/usr/local/bin`, following the [yabai wiki](https://github.com/koekeishiya/yabai/wiki).
 `yabairc` loads the scripting addition (`sudo yabai --load-sa`), which needs SIP partially disabled and a sudoers entry in `/private/etc/sudoers.d/yabai` (see the wiki). Then:
 ```
 yabai --start-service
 ```
-(To be replaced by AeroSpace.)
 
 ### Unison sync
 After signing in to iCloud: `~/.dotfiles/scripts/install_copyonchange.sh`.

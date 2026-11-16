@@ -67,7 +67,7 @@ sketchybar none"
     assert_log_has '^brew services start sketchybar$'
     assert_log_lacks '^brew services start borders'
     assert_log_has '^skhd --start-service$'
-    assert_contains "yabai" "$out"
+    case "$out" in *yabai*) fail "yabai follow-up still printed: $out" ;; esac
 }
 
 test_services_all_running() {
