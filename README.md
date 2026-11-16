@@ -1,10 +1,11 @@
 # Dotfiles of jqyDee
 macOS (Apple Silicon) dotfiles, managed with [GNU stow](https://www.gnu.org/software/stow/).
-Every top-level folder (except `scripts/`) is a stow package that mirrors `$HOME`.
+Every top-level folder (except `scripts/`, `lib/`, `tests/`) is a stow package that mirrors `$HOME`.
 
 ## Packages
 | Package | Links to | What |
 |---|---|---|
+| `aerospace` | `~/.config/aerospace` | AeroSpace tiling window manager (trial, replacing yabai) |
 | `alacritty` | `~/.config/alacritty` | terminal (Gruvbox Material) |
 | `borders` | `~/.config/borders` | JankyBorders window borders |
 | `gh` | `~/.config/gh` | GitHub CLI config (token lives in the keychain) |
