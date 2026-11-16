@@ -38,6 +38,10 @@ On a fresh Mac `git` itself triggers the Xcode command line tools installer; let
 - `./bootstrap.sh --check` changes nothing and lists where the Mac differs from the repo: missing or extra packages, missing links, settings with other values, missing extras. Run this first on a Mac that is already set up.
 - `./bootstrap.sh --only <step>` runs one step: `xcode brew signin bundle stow macos extras services`.
 - `./macos.sh [--check]` applies (or checks) only the macOS settings.
+- `./bootstrap.sh --save-local [name...]` moves packages you installed by hand into `Brewfile.local` (all of them, or only the named ones), so `--check` stops reporting them.
+
+### Machine-local packages
+`Brewfile.local` is gitignored and loaded by the `Brewfile` when it exists. Put anything there that this Mac should have but the repo shouldn't: `brew bundle` installs it here, `--check` treats it (and everything it depends on) as wanted, and a new Mac never sees it. Edit it by hand like any Brewfile.
 
 Exit codes: `0` ok, `1` drift or a failed step, `2` stow conflict, `64` wrong usage.
 

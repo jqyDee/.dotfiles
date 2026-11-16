@@ -55,3 +55,52 @@ step_stow() {
     stow -d "$DOTFILES" -t "$HOME" "${PACKAGES[@]}" || return 1
     note_change "stow linked $(wc -l <<<"$links" | tr -d ' ') paths"
 }
+
+# _brewfile_keys [file...]: "<type> <name>" for every entry (stdin without files)
+_brewfile_keys() {
+    sed -nE 's/^(tap|brew|cask|cargo|mas|npm|vscode|go|uv) "([^"]+)".*/\1 \2/p' "$@" 2>/dev/null || true
+}
+
+# save_local [name...]: append packages installed on this Mac but missing
+# from the Brewfile to Brewfile.local (all of them, or only the named ones).
+# brew bundle dump lists only what was installed on request, so their
+# dependencies stay out of the file and stop drifting with them.
+save_local() {
+    local local_file="$DOTFILES/Brewfile.local" dump known line key name arg matched
+    local comment="" found=" "
+    dump=$("$BREW" bundle dump --file=- 2>/dev/null) || {
+        note_failure "brew bundle dump"
+        return 1
+    }
+    known=$(_brewfile_keys "$DOTFILES/Brewfile" "$local_file")
+
+    while IFS= read -r line; do
+        case $line in "#"*) comment=$line && continue ;; esac
+        key=$(_brewfile_keys <<<"$line")
+        name=${key#* }
+        if [ -n "$key" ] && [ $# -gt 0 ]; then
+            matched=0
+            for arg in "$@"; do
+                if [ "$arg" = "$name" ] || [ "$arg" = "${name##*/}" ]; then
+                    found="$found$arg "
+                    matched=1
+                fi
+            done
+            [ "$matched" -eq 1 ] || key=""
+        fi
+        if [ -n "$key" ] && ! grep -qxF "$key" <<<"$known"; then
+            [ -e "$local_file" ] || printf '%s\n' \
+                "# Machine-local packages: installed on this Mac only, never committed." \
+                "# Loaded by Brewfile. Add with: ./bootstrap.sh --save-local [name...]" >"$local_file"
+            [ -z "$comment" ] || echo "$comment" >>"$local_file"
+            echo "$line" >>"$local_file"
+            known="$known"$'\n'"$key"
+            note_change "Brewfile.local: $line"
+        fi
+        comment=""
+    done <<<"$dump"
+
+    for arg in "$@"; do
+        case $found in *" $arg "*) ;; *) note_failure "$arg: not installed on request (see brew bundle dump)" ;; esac
+    done
+}

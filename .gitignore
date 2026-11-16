@@ -10,3 +10,4 @@ udo.db*
 zed/.config/zed/prompts/
 zed/.config/zed/conversations/
 docs
+Brewfile.local

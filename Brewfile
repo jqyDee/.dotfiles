@@ -139,3 +139,8 @@ cargo "cargo-release"
 cargo "git-cliff"
 mas "Noir", id: 1592917505
 mas "Xcode", id: 497799835
+
+# Machine-local extras from Brewfile.local (gitignored, never committed).
+# Add to it with: ./bootstrap.sh --save-local [name...]
+local_brewfile = File.join(__dir__, "Brewfile.local")
+instance_eval(File.read(local_brewfile), local_brewfile) if File.exist?(local_brewfile)
