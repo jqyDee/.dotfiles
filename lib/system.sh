@@ -26,6 +26,12 @@ step_brew() {
             export NO_BREW=1
             return 0
         fi
+        # the installer runs non-interactively and can't ask for a password
+        if ! sudo -v; then
+            log_warn "installing Homebrew needs an admin password (sudo)"
+            export NO_BREW=1
+            return 1
+        fi
         NONINTERACTIVE=1 /bin/bash -c \
             "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || true
         if [ ! -x "$BREW" ]; then

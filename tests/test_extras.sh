@@ -89,3 +89,13 @@ test_services_check_no_writes() {
     assert_log_lacks '^skhd'
     assert_contains "sketchybar not running" "$out"
 }
+
+test_udo_keyboard_missing_installer_fails_clearly() {
+    all_extras_present
+    fake launchctl launchctl 1
+    rc=0
+    out=$(bootstrap --only extras 2>&1) || rc=$?
+    assert_eq 1 "$rc" "return code"
+    assert_contains "udo-keyboard install.sh missing" "$out"
+    case "$out" in *"No such file or directory"*) fail "raw shell error: $out" ;; esac
+}

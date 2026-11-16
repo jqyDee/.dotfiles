@@ -91,3 +91,32 @@ sketchybar started mfischbach y"
     done
     assert_eq 1 "$(grep -c '^stow ' "$STUB_LOG")" "only the stow dry run"
 }
+
+test_brew_asks_for_sudo_first() {
+    BREW=/nonexistent bootstrap --only brew >/dev/null 2>&1 || true
+    s=$(first_line '^sudo -v')
+    c=$(first_line '^curl ')
+    [ -n "$s" ] || fail "sudo -v not called"
+    [ -n "$c" ] && [ "$s" -lt "$c" ] || fail "sudo -v (line $s) must come before the installer (line $c)"
+}
+
+test_brew_without_sudo_fails_clearly() {
+    fake sudo sudo 1
+    rc=0
+    out=$(BREW=/nonexistent bootstrap --only brew 2>&1) || rc=$?
+    assert_eq 1 "$rc" "return code"
+    assert_log_lacks '^curl '
+    assert_contains "admin password" "$out"
+}
+
+test_stow_missing_fails_clearly() {
+    mkdir -p "$FAKE/bin"
+    for f in "$TESTS"/stubs/*; do
+        [ "$(basename "$f")" = stow ] || ln -s "$f" "$FAKE/bin/"
+    done
+    rc=0
+    out=$(PATH="$FAKE/bin:/usr/bin:/bin" bootstrap --only stow 2>&1) || rc=$?
+    assert_eq 1 "$rc" "return code"
+    assert_contains "stow is not installed" "$out"
+    case "$out" in *"command not found"*) fail "raw shell error: $out" ;; esac
+}

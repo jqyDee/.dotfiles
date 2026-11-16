@@ -61,6 +61,10 @@ _extras_udo_keyboard() {
         note_drift "udo-keyboard LaunchAgent not loaded"
         return 0
     fi
+    if [ ! -x "$HOME/.config/udo-keyboard/install.sh" ]; then
+        log_warn "udo-keyboard install.sh missing (the stow step links it)"
+        return 1
+    fi
     "$HOME/.config/udo-keyboard/install.sh" || return 1
     note_change "installed udo-keyboard LaunchAgent"
 }

@@ -30,6 +30,10 @@ PACKAGES=(aerospace alacritty borders gh git ideavim nvim sketchybar skhd starsh
 # The dry run uses plain stow, not -R: restow lists every existing link.
 step_stow() {
     local out rc=0 links conflicts line
+    if ! command -v stow >/dev/null; then
+        log_warn "stow is not installed (it comes from the Brewfile; did the brew or bundle step fail?)"
+        return 1
+    fi
     out=$(stow -n -v -d "$DOTFILES" -t "$HOME" "${PACKAGES[@]}" 2>&1) || rc=$?
 
     conflicts=$(grep -E 'existing target|cannot stow|conflict' <<<"$out" || true)
