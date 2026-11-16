@@ -24,6 +24,8 @@ brew "gh"
 brew "gnupg"
 # Graphical front-end for GCC's coverage testing tool (gcov)
 brew "lcov"
+# Next-gen compiler infrastructure
+brew "llvm"
 # Powerful, lightweight programming language
 brew "lua"
 # Package manager for the Lua programming language
@@ -40,6 +42,8 @@ brew "openconnect"
 brew "opencv"
 # Python version management
 brew "pyenv"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
 # Rust toolchain installer
 brew "rustup"
 # Static analysis and lint tool, for (ba)sh scripts
