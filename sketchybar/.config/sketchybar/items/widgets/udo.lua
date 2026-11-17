@@ -17,7 +17,7 @@ local udo = sbar.add("item", "widgets.udo", {
 })
 
 local function update()
-  sbar.exec("udo status --short",
+  sbar.exec('PATH="$PATH:$HOME/.cargo/bin" udo status --short',
     function(result)
       local text = (result or ""):gsub("%s+$", "")
       if text == "" then

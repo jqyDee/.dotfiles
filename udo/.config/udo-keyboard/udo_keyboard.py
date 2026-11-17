@@ -16,6 +16,9 @@ Packet (32 bytes, little-endian): [0]=0x55 magic, [1]=0x01 version, [2] state
 ASCII, NUL-padded. Must match the firmware's packet.h (corne-zmk repo,
 modules/udo-status/include/udo_status/packet.h).
 """
+
+import os
+import shutil
 import json
 import logging
 import subprocess
@@ -23,6 +26,12 @@ import sys
 import time
 import unicodedata
 from datetime import datetime, timezone
+
+# launchd's PATH (the plist) has no ~/.cargo/bin: added at the end, so a
+# brew udo (/opt/homebrew/bin) wins once installed, cargo's is the fallback
+UDO_PATH = os.pathsep.join(
+    [os.environ.get("PATH", ""), os.path.expanduser("~/.cargo/bin")]
+)
 
 MAGIC, VERSION = 0x55, 0x01
 PACKET_LEN, NAME_LEN, REPORT_SIZE = 32, 24, 32
@@ -33,8 +42,9 @@ UDO = "udo"
 
 log = logging.getLogger("udo-status")
 
-_TRANSLIT = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "Ä": "Ae", "Ö": "Oe",
-                           "Ü": "Ue", "ß": "ss"})
+_TRANSLIT = str.maketrans(
+    {"ä": "ae", "ö": "oe", "ü": "ue", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue", "ß": "ss"}
+)
 
 
 def ascii_name(task: str) -> bytes:
@@ -53,8 +63,12 @@ def encode(status: dict | None, now: datetime) -> bytes:
         started = started.astimezone()  # no offset: local time
     elapsed = min(max(int((now - started).total_seconds()), 0), 2**32 - 1)
     name = ascii_name(status["task"])
-    return (bytes([MAGIC, VERSION, 1, 0]) + elapsed.to_bytes(4, "little")
-            + name + bytes(NAME_LEN - len(name)))
+    return (
+        bytes([MAGIC, VERSION, 1, 0])
+        + elapsed.to_bytes(4, "little")
+        + name
+        + bytes(NAME_LEN - len(name))
+    )
 
 
 def packet_for(status, now: datetime) -> bytes | None:
@@ -100,8 +114,11 @@ class Sender:
 
     def _open(self):
         for info in self.hid.enumerate():
-            if (info["usage_page"] == USAGE_PAGE and info["usage"] == USAGE
-                    and info.get("product_string") == PRODUCT):
+            if (
+                info["usage_page"] == USAGE_PAGE
+                and info["usage"] == USAGE
+                and info.get("product_string") == PRODUCT
+            ):
                 dev = self.hid.device()
                 dev.open_path(info["path"])
                 self.devices.append(dev)
@@ -134,11 +151,25 @@ class Sender:
 
 def read_status() -> tuple[bool, dict | None, str]:
     """(ok, running, error) from `udo status --json`; ok=False if udo failed."""
+    udo = shutil.which("udo", path=UDO_PATH)
+    if udo is None:
+        return False, None, f"udo status failed: no udo on {UDO_PATH}"
     try:
-        out = subprocess.run([UDO, "status", "--json"], capture_output=True, timeout=5,
-                             check=True, text=True).stdout
+        out = subprocess.run(
+            [udo, "status", "--json"],
+            capture_output=True,
+            timeout=5,
+            check=True,
+            text=True,
+        ).stdout
         return True, json.loads(out)["running"], ""
-    except (OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError) as err:
+    except (
+        OSError,
+        subprocess.SubprocessError,
+        ValueError,
+        KeyError,
+        TypeError,
+    ) as err:
         return False, None, f"udo status failed: {err}"
 
 
@@ -165,7 +196,10 @@ def main() -> None:
                     if verbose:
                         log.info("%s %s", "sent" if sent else "failed", packet.hex(" "))
                     if sent != connected:
-                        log.info("keyboard %s", "connected" if sent else "not reachable, retrying")
+                        log.info(
+                            "keyboard %s",
+                            "connected" if sent else "not reachable, retrying",
+                        )
                         connected = sent
                 if sent:
                     last, last_sent_at = packet, time.monotonic()
