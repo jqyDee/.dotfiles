@@ -3,7 +3,7 @@ local settings = require("settings")
 local app_icons = require("helpers.app_icons")
 
 local aerospace = "/opt/homebrew/bin/aerospace"
-local workspace_ids = { "1", "2", "3", "4", "5", "6" }
+local workspace_ids = { "1", "2", "3", "4", "5", "6", "7" }
 
 -- Triggered from aerospace.toml (exec-on-workspace-change / on-focus-changed)
 sbar.add("event", "aerospace_workspace_change")
