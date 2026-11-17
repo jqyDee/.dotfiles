@@ -11,3 +11,5 @@ zed/.config/zed/prompts/
 zed/.config/zed/conversations/
 docs
 Brewfile.local
+*.db*
+view.toml
