@@ -67,14 +67,6 @@ return {
      dependencies = { 'nvim-lua/plenary.nvim' },
   },
 
-  -- tree sidebar
-  {
-  "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-  },
-
   -- latex
   {
     "lervag/vimtex",
