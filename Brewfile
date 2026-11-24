@@ -23,6 +23,8 @@ brew "gh"
 brew "gnupg"
 # Graphical front-end for GCC's coverage testing tool (gcov)
 brew "lcov"
+# Library to render SVG files using Cairo
+brew "librsvg"
 # LLVM Project Linker
 brew "lld"
 # Next-gen compiler infrastructure
@@ -33,10 +35,14 @@ brew "lua"
 brew "luarocks"
 # Mac App Store command-line interface
 brew "mas"
+# VPN client for secure internet access and private browsing
+cask "nordvpn"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
 brew "node"
+# Image editor
+cask "photocraft"
 # Open client for Cisco AnyConnect VPN
 brew "openconnect"
 # Open source computer vision library
