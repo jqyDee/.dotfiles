@@ -54,9 +54,17 @@ ignore = Path archive-cs
 ignore = Name .DS_Store
 ignore = Path do-not-track
 
+# Build output and environments: rebuildable, and iCloud evicts them,
+# which makes unison fail on every run
+ignore = Name target
+ignore = Name {.venv,venv}
+ignore = Name __pycache__
+ignore = Name {build,CMakeFiles}
+ignore = Name .cache
+
 auto = true
-log = true
-logfile = $LOG_FILE
+# The wrapper (unison_sync.sh) captures the output of each run
+log = false
 EOF
 
 # --- Create wrapper script ---
@@ -68,10 +76,13 @@ PROFILE_NAME="$PROFILE_NAME"
 LOG_FILE="$LOG_FILE"
 UNISON_BIN="$UNISON_BIN"
 
-echo "===== \$(date) =====" >> "\$LOG_FILE"
-"\$UNISON_BIN" "\$PROFILE_NAME" -batch -auto -log >> "\$LOG_FILE" 2>&1 || \
-    echo "\$(date): Unison returned non-zero" >> "\$LOG_FILE"
-echo "===== done \$(date) =====" >> "\$LOG_FILE"
+# Only the last run is kept: the log is overwritten on every run
+{
+    echo "===== \$(date) ====="
+    "\$UNISON_BIN" "\$PROFILE_NAME" -batch -auto ||
+        echo "\$(date): Unison returned non-zero"
+    echo "===== done \$(date) ====="
+} >"\$LOG_FILE" 2>&1
 EOF
 
 chmod +x "$WRAPPER"
@@ -104,6 +115,10 @@ cat > "$PLIST_PATH" <<EOF
 
     <key>RunAtLoad</key>
     <true/>
+
+    <!-- At most one run per minute, even if every run changes the watched paths -->
+    <key>ThrottleInterval</key>
+    <integer>60</integer>
 </dict>
 </plist>
 EOF
