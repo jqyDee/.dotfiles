@@ -7,6 +7,8 @@ config-version = 2
 after-startup-command = [
     # sketchybar picks its spaces representation at load, so reload once AeroSpace runs
     'exec-and-forget /opt/homebrew/bin/sketchybar --reload',
+    # Pause focus-follows-mouse while a native fullscreen window is focused
+    'exec-and-forget ~/.config/aerospace/ffm-fullscreen-guard.sh',
 ]
 
 # Notify sketchybar about workspace and window/focus changes
@@ -39,12 +41,13 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 automatically-unhide-macos-hidden-apps = true
 
 # Workspaces that stay alive even when empty
-persistent-workspaces = ["1", "2", "3", "4", "5", "6"]
+persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7"]
 
 # A callback that runs every time binding mode changes
 on-mode-changed = []
 
 # yabai: focus_follows_mouse autoraise
+# Toggled automatically by ffm-fullscreen-guard.sh, don't change the line format
 focus-follows-mouse.enabled = true
 
 key-mapping.preset = 'qwerty'
