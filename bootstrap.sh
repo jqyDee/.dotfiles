@@ -12,7 +12,7 @@
 # Exit codes: 0 ok, 1 drift or a failed step, 2 stow conflict, 64 usage.
 set -euo pipefail
 
-STEPS="xcode brew signin bundle stow repos sync macos extras services"
+STEPS="xcode brew signin bundle stow repos sync backup macos extras services"
 
 usage() {
     echo "usage: $0 [--check] [--only <step>] | --save-local [name...]" >&2

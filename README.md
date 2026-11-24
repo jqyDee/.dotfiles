@@ -35,7 +35,7 @@ On a fresh Mac `git` itself triggers the Xcode command line tools installer; let
 
 `bootstrap.sh` is safe to re-run: every step skips work that is already done.
 - `./bootstrap.sh --check` changes nothing and lists where the Mac differs from the repo: missing or extra packages, missing links, settings with other values, missing extras. Run this first on a Mac that is already set up.
-- `./bootstrap.sh --only <step>` runs one step: `xcode brew signin bundle stow repos sync macos extras services`.
+- `./bootstrap.sh --only <step>` runs one step: `xcode brew signin bundle stow repos sync backup macos extras services`.
 - `./macos.sh [--check]` applies (or checks) only the macOS settings.
 - `./macos.sh --record` finds the keys behind a System Settings toggle: it snapshots all `defaults` domains, waits while you change something, then prints ready-to-paste `setting` lines for `macos.sh` (lists and dictionaries are shown as `# manual`). It only reads.
 - `./bootstrap.sh --save-local [name...]` moves packages you installed by hand into `Brewfile.local` (all of them, or only the named ones), so `--check` stops reporting them.
@@ -50,9 +50,10 @@ Exit codes: `0` ok, `1` drift or a failed step, `2` stow conflict, `64` wrong us
 2. First run only: waits until you have signed in to the App Store and iCloud (needed for `mas` and the Unison sync).
 3. `brew bundle` with the Brewfile: installs what is missing, never upgrades (run `brew upgrade` yourself). In `--check` mode it also lists installed packages that are not in the Brewfile; it never uninstalls anything.
 4. Links every stow package. If a real file is in the way it stops before linking anything and prints the paths: move those files away and run it again. It never uses `--adopt`.
-5. Applies the settings in `macos.sh`. Only values that differ are written; Dock and Finder restart only if one of their settings changed. Keyboard, trackpad and menu bar settings need a log out.
-6. Extras: zsh plugins (`~/.zsh`), tpm (`~/.tmux/plugins/tpm`, then `prefix + I` in tmux), SbarLua and the sketchybar app font, the udo-keyboard LaunchAgent.
-7. Starts the sketchybar and borders services, and AeroSpace (which then starts at login by itself).
+5. udo backup: installs the `local.udo.backup` LaunchAgent, which copies udo's database (`~/Library/Application Support/udo/udo.db`) every day at 00:00 to `~/.local/share/udo-backups/udo-YYYY-MM-DD.db`, keeps the newest 50 copies, and mirrors the folder to iCloud Drive (`Backups/udo`) with unison (macOS blocks its own tools from iCloud Drive in a LaunchAgent; unison has the permission from the CS-Studies sync). On a fresh Mac without a database it first restores the newest copy from iCloud. Back up by hand with `~/.config/udo-backup/backup.sh`; log in `/tmp/udo-backup.log`.
+6. Applies the settings in `macos.sh`. Only values that differ are written; Dock and Finder restart only if one of their settings changed. Keyboard, trackpad and menu bar settings need a log out.
+7. Extras: zsh plugins (`~/.zsh`), tpm (`~/.tmux/plugins/tpm`, then `prefix + I` in tmux), SbarLua and the sketchybar app font, the udo-keyboard LaunchAgent.
+8. Starts the sketchybar and borders services, and AeroSpace (which then starts at login by itself).
 
 The sketchybar event providers in `helpers/` are compiled on every start (`helpers/init.lua` runs `make`).
 
