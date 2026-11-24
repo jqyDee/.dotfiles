@@ -105,3 +105,26 @@ sketchybar started mfischbach y"
     assert_contains "AeroSpace not running" "$out"
     assert_log_lacks '^open'
 }
+
+test_wallpaper_set_when_different() {
+    all_extras_present
+    fake osascript osascript 0 "/Users/x/Pictures/old.png, $DOTFILES/wallpaper/tree.png"
+    bootstrap --only extras >/dev/null
+    assert_log_has "^osascript .*set picture of every desktop to \"$DOTFILES/wallpaper/tree.png\""
+}
+
+test_wallpaper_already_set() {
+    all_extras_present
+    bootstrap --only extras >/dev/null
+    assert_log_lacks 'set picture'
+}
+
+test_wallpaper_check_no_writes() {
+    all_extras_present
+    fake osascript osascript 0 "/Users/x/Pictures/old.png"
+    rc=0
+    out=$(bootstrap --check --only extras) || rc=$?
+    assert_eq 1 "$rc" "return code"
+    assert_contains "wallpaper is not" "$out"
+    assert_log_lacks 'set picture'
+}

@@ -11,6 +11,7 @@
 
 _MACOS_RESTART="" # apps to restart, space separated
 _MACOS_LOGOUT=0   # a setting that only applies after logging out changed
+_MACOS_SAFARI=0   # a Safari setting changed (applies when Safari restarts)
 
 # _macos_normalize <-type> <value>: compare bools as 1/0, floats as numbers
 _macos_normalize() {
@@ -50,12 +51,38 @@ setting() {
     com.apple.finder) _macos_mark Finder ;;
     com.apple.menuextra.clock | com.apple.controlcenter) _macos_mark ControlCenter ;;
     NSGlobalDomain | com.apple.AppleMultitouchTrackpad | com.apple.HIToolbox) _MACOS_LOGOUT=1 ;;
+    com.apple.Safari) _MACOS_SAFARI=1 ;;
     esac
+}
+
+# Safari keeps its settings in its sandbox container. Without Full Disk
+# Access `defaults` can't see them: reads come back unset and writes land in
+# the wrong file, so skip them instead.
+_macos_safari() {
+    if ! ls "$HOME/Library/Containers/com.apple.Safari/Data/Library/Preferences" >/dev/null 2>&1; then
+        log_warn "Safari settings skipped: no access to Safari's container"
+        note_followup "open Safari once, give your terminal Full Disk Access (System Settings → Privacy & Security), restart it, then run ./bootstrap.sh --only macos"
+        return 0
+    fi
+    setting com.apple.Safari IncludeDevelopMenu -bool true
+    setting com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+    setting com.apple.Safari WebKitPreferences.developerExtrasEnabled -bool true
+    setting com.apple.Safari AutoOpenSafeDownloads -bool false
+    setting com.apple.Safari ShowStandaloneTabBar -bool false # compact tab layout
+    setting com.apple.Safari EnableNarrowTabs -bool true
+    setting com.apple.Safari ShowFullURLInSmartSearchField -bool false
+    setting com.apple.Safari ShowOverlayStatusBar -bool false
+    setting com.apple.Safari ShowBackgroundImageInFavorites -bool false
+    setting com.apple.Safari PrivateBrowsingRequiresAuthentication -bool true
+    setting com.apple.Safari HomePage -string "http://localhost:8765/"
+    setting com.apple.Safari NewWindowBehavior -int 0 # new windows: homepage
+    setting com.apple.Safari NewTabBehavior -int 4    # new tabs: Start Page
 }
 
 step_macos() {
     _MACOS_RESTART=""
     _MACOS_LOGOUT=0
+    _MACOS_SAFARI=0
 
     # Dock
     setting com.apple.dock autohide -bool true
@@ -123,6 +150,8 @@ step_macos() {
     setting com.apple.WindowManager AppWindowGroupingBehavior -int 1
     setting com.apple.WindowManager AutoHide -bool true
 
+    _macos_safari
+
     [ "$MODE" = apply ] || return 0
     local app
     for app in $_MACOS_RESTART; do
@@ -130,6 +159,10 @@ step_macos() {
     done
     if [ "$_MACOS_LOGOUT" -eq 1 ]; then
         note_followup "log out and back in for keyboard/trackpad/menu bar settings"
+    fi
+    # not killed like Dock/Finder: that would close the open tabs
+    if [ "$_MACOS_SAFARI" -eq 1 ]; then
+        note_followup "restart Safari for its new settings"
     fi
 }
 

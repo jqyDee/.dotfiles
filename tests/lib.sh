@@ -63,7 +63,7 @@ fake() {
 }
 
 # every extras target present, udo-keyboard agent loaded (launchctl rc 0),
-# the unison sync set up
+# the unison sync set up, the wallpaper set
 all_extras_present() {
     mkdir -p "$HOME/.zsh/zsh-autosuggestions" "$HOME/.zsh/zsh-syntax-highlighting" \
         "$HOME/.tmux/plugins/tpm" "$HOME/.local/share/sketchybar_lua" \
@@ -72,4 +72,5 @@ all_extras_present() {
     xattr -w 'com.apple.fileprovider.pinned#PX' 1 "$HOME/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"
     touch "$HOME/.local/share/sketchybar_lua/sketchybar.so" \
         "$HOME/Library/Fonts/sketchybar-app-font.ttf" "$HOME/.unison/cs-sync.prf"
+    fake osascript osascript 0 "$DOTFILES/wallpaper/tree.png, $DOTFILES/wallpaper/tree.png"
 }

@@ -69,3 +69,27 @@ test_standalone_bad_flag() {
     bash "$DOTFILES/macos.sh" --nope >/dev/null 2>&1 || rc=$?
     assert_eq 64 "$rc" "return code"
 }
+
+safari_access() { mkdir -p "$HOME/Library/Containers/com.apple.Safari/Data/Library/Preferences"; }
+
+test_safari_skipped_without_access() {
+    step_macos >/dev/null 2>&1
+    assert_log_lacks '^defaults (read|write) com.apple.Safari'
+    assert_contains "Full Disk Access" "$(print_summary)"
+}
+
+test_safari_written_with_access() {
+    safari_access
+    step_macos >/dev/null
+    assert_log_has '^defaults write com.apple.Safari IncludeDevelopMenu -bool true$'
+    assert_contains "restart Safari" "$(print_summary)"
+    assert_log_lacks '^killall Safari'
+}
+
+test_safari_set_no_followup() {
+    safari_access
+    all_set
+    step_macos >/dev/null
+    assert_log_lacks '^defaults write com.apple.Safari'
+    case "$(print_summary)" in *"restart Safari"*) fail "restart followup without change" ;; esac
+}

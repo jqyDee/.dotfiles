@@ -52,6 +52,21 @@ _extras_udo_keyboard() {
     note_change "installed udo-keyboard LaunchAgent"
 }
 
+# Sets the picture on every desktop. The first run asks to let the terminal
+# control System Events.
+_extras_wallpaper() {
+    local want="$DOTFILES/wallpaper/tree.png" current
+    current=$(osascript -e 'tell application "System Events" to get picture of every desktop' 2>/dev/null) || current=""
+    # one path per desktop, comma separated
+    [ -n "$current" ] && ! tr ',' '\n' <<<"$current" | sed 's/^ *//' | grep -qvxF "$want" && return 0
+    if [ "$MODE" = check ]; then
+        note_drift "wallpaper is not $want"
+        return 0
+    fi
+    osascript -e "tell application \"System Events\" to set picture of every desktop to \"$want\"" >/dev/null || return 1
+    note_change "set wallpaper to $want"
+}
+
 step_extras() {
     local failed=0
     ensure_clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.zsh/zsh-autosuggestions" || failed=1
@@ -61,6 +76,7 @@ step_extras() {
     ensure_download https://github.com/kvndrsslr/sketchybar-app-font/releases/latest/download/sketchybar-app-font.ttf \
         "$HOME/Library/Fonts/sketchybar-app-font.ttf" || failed=1
     _extras_udo_keyboard || failed=1
+    _extras_wallpaper || failed=1
     return "$failed"
 }
 
