@@ -52,7 +52,7 @@ test_brewfile_parses() {
     done
 }
 
-PKGS="aerospace alacritty borders gh git ideavim nvim sketchybar starship tmux udo zed zsh"
+PKGS="aerospace alacritty borders gh git ideavim nvim sketchybar starship tmux typst udo zed zsh"
 
 test_stow_conflict_aborts() {
     fake stow stow 1 "WARNING! stowing zsh would cause conflicts:

@@ -1,0 +1,10 @@
+[package]
+name = "templates"
+version = "0.1.0"
+entrypoint = "templates.typ"
+authors = ["Matti Fischbach"]
+license = "MIT"
+repository = "https://github.com/jqyDee/typst-templates"
+description = "My typst templates"
+# exclude = ["docs/assets/*", "*.pdf"]
+

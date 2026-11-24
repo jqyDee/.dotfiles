@@ -38,23 +38,6 @@ _extras_sbarlua() {
     return "$rc"
 }
 
-_extras_typst() {
-    local dest="$HOME/Library/Application Support/typst/packages/local"
-    [ -e "$dest" ] && return 0
-    if [ "$MODE" = apply ]; then
-        # ssh -T exits 1 even on success; only the greeting tells
-        local greeting
-        greeting=$(ssh -T -o BatchMode=yes -o ConnectTimeout=5 git@github.com 2>&1) || true
-        case $greeting in *"successfully authenticated"*) ;; *) _extras_no_ssh; return 0 ;; esac
-    fi
-    ensure_clone git@github.com:jqyDee/typst-templates.git "$dest"
-}
-
-_extras_no_ssh() {
-    log_warn "no GitHub SSH access, skipping typst templates"
-    note_followup "clone typst-templates after adding an SSH key: re-run ./bootstrap.sh --only extras"
-}
-
 _extras_udo_keyboard() {
     launchctl print "gui/$(id -u)/local.corne.udo-status" >/dev/null 2>&1 && return 0
     if [ "$MODE" = check ]; then
@@ -77,7 +60,6 @@ step_extras() {
     _extras_sbarlua || failed=1
     ensure_download https://github.com/kvndrsslr/sketchybar-app-font/releases/latest/download/sketchybar-app-font.ttf \
         "$HOME/Library/Fonts/sketchybar-app-font.ttf" || failed=1
-    _extras_typst || failed=1
     _extras_udo_keyboard || failed=1
     return "$failed"
 }

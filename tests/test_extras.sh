@@ -4,7 +4,6 @@ bootstrap() { bash "$DOTFILES/bootstrap.sh" "$@"; }
 
 
 test_extras_clone_when_missing() {
-    fake ssh ssh 1 "Hi jqyDee! You've successfully authenticated, but GitHub does not provide shell access."
     bootstrap --only extras >/dev/null
     assert_log_has '^git clone .*https://github.com/zsh-users/zsh-autosuggestions '
     assert_log_has '^git clone .*https://github.com/zsh-users/zsh-syntax-highlighting '
@@ -12,9 +11,7 @@ test_extras_clone_when_missing() {
     assert_log_has '^git clone .*https://github.com/FelixKratz/SbarLua.git '
     assert_log_has '^make install$'
     assert_log_has '^curl .*sketchybar-app-font.ttf'
-    assert_log_has '^git clone .*git@github.com:jqyDee/typst-templates.git '
     assert_file "$HOME/.tmux/plugins/tpm"
-    assert_file "$HOME/$TYPST_DIR"
 }
 
 test_extras_skip_existing() {
@@ -23,17 +20,6 @@ test_extras_skip_existing() {
     assert_log_lacks '^git clone'
     assert_log_lacks '^curl'
     assert_log_lacks '^make'
-    assert_log_lacks '^ssh'
-}
-
-test_typst_without_ssh_key_warns() {
-    fake ssh ssh 255 "git@github.com: Permission denied (publickey)."
-    rc=0
-    out=$(bootstrap --only extras 2>&1) || rc=$?
-    assert_eq 0 "$rc" "return code"
-    assert_log_lacks 'typst-templates'
-    assert_contains "SSH key" "$out"
-    assert_no_file "$HOME/$TYPST_DIR"
 }
 
 test_udo_keyboard_installed_when_agent_missing() {
@@ -54,7 +40,6 @@ test_extras_check_no_writes() {
     assert_log_lacks '^git clone'
     assert_log_lacks '^curl'
     assert_log_lacks '^make'
-    assert_log_lacks '^ssh'
     assert_contains "missing: $HOME/.tmux/plugins/tpm" "$out"
     assert_contains "sketchybar_lua" "$out"
 }

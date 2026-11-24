@@ -84,7 +84,7 @@ sketchybar started mfischbach y"
 
     bootstrap >/dev/null
     for re in '^defaults write' '^killall' '^git clone' '^curl' '^make' \
-        'services start' '^xcode-select --install' '^ssh'; do
+        'services start' '^xcode-select --install'; do
         assert_log_lacks "$re"
     done
     assert_eq 1 "$(grep -c '^stow ' "$STUB_LOG")" "only the stow dry run"
