@@ -48,7 +48,8 @@ setting() {
     case $domain in
     com.apple.dock | com.apple.spaces | com.apple.WindowManager) _macos_mark Dock ;;
     com.apple.finder) _macos_mark Finder ;;
-    NSGlobalDomain | com.apple.AppleMultitouchTrackpad) _MACOS_LOGOUT=1 ;;
+    com.apple.menuextra.clock | com.apple.controlcenter) _macos_mark ControlCenter ;;
+    NSGlobalDomain | com.apple.AppleMultitouchTrackpad | com.apple.HIToolbox) _MACOS_LOGOUT=1 ;;
     esac
 }
 
@@ -62,12 +63,17 @@ step_macos() {
     setting com.apple.dock tilesize -int 52
     setting com.apple.dock show-recents -bool false
     setting com.apple.dock mru-spaces -bool false # don't reorder Spaces
+    setting com.apple.dock mineffect -string scale
 
     # Finder
     setting com.apple.finder ShowPathbar -bool true
     setting com.apple.finder ShowStatusBar -bool true
     setting com.apple.finder FXPreferredViewStyle -string Nlsv  # list view
     setting com.apple.finder FXDefaultSearchScope -string SCcf # search current folder
+    setting com.apple.finder FXPreferredGroupBy -string "Date Added"
+    setting com.apple.finder NewWindowTarget -string PfLo # new windows: the folder below
+    setting com.apple.finder NewWindowTargetPath -string "file://$HOME/Downloads/"
+    setting NSGlobalDomain AppleShowAllExtensions -bool true
 
     # keyboard, text, appearance
     setting NSGlobalDomain KeyRepeat -int 1
@@ -78,6 +84,31 @@ step_macos() {
     setting NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
     setting NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
     setting NSGlobalDomain com.apple.swipescrolldirection -bool true # macOS default
+    setting NSGlobalDomain AppleReduceDesktopTinting -bool true      # no wallpaper tint in windows
+    setting NSGlobalDomain AppleWindowTabbingMode -string manual     # open documents as windows, not tabs
+    setting NSGlobalDomain com.apple.keyboard.fnState -bool true     # F1-F12 as standard function keys
+    setting com.apple.HIToolbox AppleFnUsageType -int 0              # fn/globe key does nothing
+
+    # menu bar (hidden for sketchybar, still used by Control Center)
+    setting com.apple.menuextra.clock ShowSeconds -bool true
+    setting com.apple.TextInputMenu visible -bool false # no input source menu
+    # which Control Center items show, and their order (pixels from the right)
+    setting com.apple.controlcenter "NSStatusItem Visible Battery" -bool true
+    setting com.apple.controlcenter "NSStatusItem Visible BentoBox" -bool true
+    setting com.apple.controlcenter "NSStatusItem Visible Clock" -bool true
+    setting com.apple.controlcenter "NSStatusItem Visible Sound" -bool true
+    setting com.apple.controlcenter "NSStatusItem Visible WiFi" -bool true
+    setting com.apple.controlcenter "NSStatusItem Visible NowPlaying" -bool false
+    setting com.apple.controlcenter "NSStatusItem Visible ScreenMirroring" -bool false
+    setting com.apple.controlcenter "NSStatusItem Visible AudioVideoModule" -bool false
+    setting com.apple.controlcenter "NSStatusItem Visible Shortcuts" -bool false
+    setting com.apple.controlcenter "NSStatusItem Preferred Position BentoBox" -float 190
+    setting com.apple.controlcenter "NSStatusItem Preferred Position Battery" -float 224
+    setting com.apple.controlcenter "NSStatusItem Preferred Position NowPlaying" -float 270
+    setting com.apple.controlcenter "NSStatusItem Preferred Position WiFi" -float 297
+    setting com.apple.controlcenter "NSStatusItem Preferred Position Sound" -float 335
+    setting com.apple.controlcenter "NSStatusItem Preferred Position ScreenMirroring" -float 341
+    setting bobko.aerospace "NSStatusItem Preferred Position Item-0" -float 517
 
     # trackpad
     setting com.apple.AppleMultitouchTrackpad Clicking -bool true # tap to click
@@ -86,6 +117,11 @@ step_macos() {
     setting com.apple.WindowManager EnableStandardClickToShowDesktop -bool false
     setting com.apple.WindowManager GloballyEnabled -bool false # Stage Manager, macOS default
     setting com.apple.spaces spans-displays -bool false         # macOS default
+    setting com.apple.WindowManager HideDesktop -bool true      # no desktop icons
+    setting com.apple.WindowManager StandardHideWidgets -bool true
+    setting com.apple.WindowManager StageManagerHideWidgets -bool true
+    setting com.apple.WindowManager AppWindowGroupingBehavior -int 1
+    setting com.apple.WindowManager AutoHide -bool true
 
     [ "$MODE" = apply ] || return 0
     local app
