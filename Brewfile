@@ -1,4 +1,3 @@
-tap "asmvik/formulae"
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae"
 tap "hashicorp/tap"
 tap "jqydee/tap", trusted: true
@@ -66,8 +65,6 @@ brew "typst"
 brew "unison"
 # Internet file retriever
 brew "wget"
-# Simple hotkey-daemon for macOS.
-brew "asmvik/formulae/skhd", trusted: true
 # A window border system for macOS
 brew "felixkratz/formulae/borders", trusted: true
 # Custom macOS statusbar with shell plugin, interaction and graph support

@@ -96,14 +96,5 @@ step_services() {
         "$BREW" services start "$name" >/dev/null && note_change "started $name" || failed=1
     done
 
-    set -- "$HOME"/Library/LaunchAgents/*skhd*.plist
-    if [ ! -e "$1" ]; then
-        if [ "$MODE" = check ]; then
-            note_drift "skhd service not installed"
-        else
-            skhd --start-service && note_change "started skhd" || failed=1
-        fi
-    fi
-
     return "$failed"
 }

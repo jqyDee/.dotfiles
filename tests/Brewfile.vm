@@ -2,7 +2,6 @@
 # configs in this repo need, no big apps, no cargo, no App Store.
 #   cp tests/Brewfile.vm Brewfile && ./bootstrap.sh   (inside the VM only)
 
-tap "asmvik/formulae"
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae"
 tap "jqydee/tap", trusted: true
 tap "nikitabobko/tap"
@@ -15,11 +14,10 @@ brew "neovim"
 brew "ripgrep"
 brew "gh"
 
-# sketchybar (Lua config) and its widgets, skhd hotkeys
+# sketchybar (Lua config) and its widgets
 brew "lua"
 brew "switchaudio-osx"
 brew "displayplacer"
-brew "asmvik/formulae/skhd", trusted: true
 brew "felixkratz/formulae/borders", trusted: true
 brew "felixkratz/formulae/sketchybar", trusted: true
 

@@ -80,13 +80,11 @@ test_rerun_is_noop() {
     all_extras_present
     fake brew services-list 0 "borders    started mfischbach x
 sketchybar started mfischbach y"
-    mkdir -p "$HOME/Library/LaunchAgents"
-    touch "$HOME/Library/LaunchAgents/com.koekeishiya.skhd.plist"
     : >"$STUB_LOG"
 
     bootstrap >/dev/null
     for re in '^defaults write' '^killall' '^git clone' '^curl' '^make' \
-        'services start' '^skhd' '^xcode-select --install' '^ssh'; do
+        'services start' '^xcode-select --install' '^ssh'; do
         assert_log_lacks "$re"
     done
     assert_eq 1 "$(grep -c '^stow ' "$STUB_LOG")" "only the stow dry run"

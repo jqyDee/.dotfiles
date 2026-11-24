@@ -5,7 +5,7 @@ Every top-level folder (except `scripts/`, `lib/`, `tests/`) is a stow package t
 ## Packages
 | Package | Links to | What |
 |---|---|---|
-| `aerospace` | `~/.config/aerospace` | AeroSpace tiling window manager (default) |
+| `aerospace` | `~/.config/aerospace` | AeroSpace tiling window manager |
 | `alacritty` | `~/.config/alacritty` | terminal (Gruvbox Material) |
 | `borders` | `~/.config/borders` | JankyBorders window borders |
 | `gh` | `~/.config/gh` | GitHub CLI config (token lives in the keychain) |
@@ -13,11 +13,9 @@ Every top-level folder (except `scripts/`, `lib/`, `tests/`) is a stow package t
 | `ideavim` | `~/.ideavimrc` | IdeaVim for JetBrains IDEs |
 | `nvim` | `~/.config/nvim` | Neovim (lazy.nvim) |
 | `sketchybar` | `~/.config/sketchybar` | status bar (Lua config via SbarLua) |
-| `skhd` | `~/.config/skhd` | hotkeys |
 | `starship` | `~/.config/starship.toml` | prompt |
 | `tmux` | `~/.tmux.conf` | tmux with a hand-rolled gruvbox status line |
 | `udo` | `~/.config/udo-keyboard` | feeds `udo status` to the Corne keyboard display |
-| `yabai` | `~/.config/yabai` | tiling window manager (optional alternative, see below) |
 | `zed` | `~/.config/zed` | Zed editor |
 | `zsh` | `~/.zshenv`, `~/.config/zsh` | zsh (`ZDOTDIR` is set to `~/.config/zsh`) |
 
@@ -53,20 +51,13 @@ Exit codes: `0` ok, `1` drift or a failed step, `2` stow conflict, `64` wrong us
 4. Links every stow package. If a real file is in the way it stops before linking anything and prints the paths: move those files away and run it again. It never uses `--adopt`.
 5. Applies the settings in `macos.sh`. Only values that differ are written; Dock and Finder restart only if one of their settings changed. Keyboard, trackpad and menu bar settings need a log out.
 6. Extras: zsh plugins (`~/.zsh`), tpm (`~/.tmux/plugins/tpm`, then `prefix + I` in tmux), SbarLua and the sketchybar app font, the typst templates repo (`@local/templates`, needs a GitHub SSH key; skipped with a note otherwise), the udo-keyboard LaunchAgent.
-7. Starts the sketchybar, borders and skhd services.
+7. Starts the sketchybar and borders services.
 
 The sketchybar event providers in `helpers/` are compiled on every start (`helpers/init.lua` runs `make`).
 
 ## Manual steps
 ### Permissions
-AeroSpace, skhd and sketchybar (and yabai, if installed) ask for Accessibility / Screen Recording access when they first start. Grant it in System Settings.
-
-### yabai (optional)
-AeroSpace is the default; sketchybar works with either (`switchwm` in zsh switches). yabai is not in the Brewfile: installed as a pre-built binary into `/usr/local/bin`, following the [yabai wiki](https://github.com/koekeishiya/yabai/wiki).
-`yabairc` loads the scripting addition (`sudo yabai --load-sa`), which needs SIP partially disabled and a sudoers entry in `/private/etc/sudoers.d/yabai` (see the wiki). Then:
-```
-yabai --start-service
-```
+AeroSpace and sketchybar ask for Accessibility / Screen Recording access when they first start. Grant it in System Settings.
 
 ### Unison sync
 After signing in to iCloud: `~/.dotfiles/scripts/install_copyonchange.sh`.

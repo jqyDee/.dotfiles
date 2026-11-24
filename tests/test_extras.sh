@@ -63,21 +63,16 @@ test_services_start_missing() {
     fake brew services-list 0 "Name       Status  User       File
 borders    started mfischbach ~/Library/LaunchAgents/homebrew.mxcl.borders.plist
 sketchybar none"
-    out=$(bootstrap --only services)
+    bootstrap --only services >/dev/null
     assert_log_has '^brew services start sketchybar$'
     assert_log_lacks '^brew services start borders'
-    assert_log_has '^skhd --start-service$'
-    case "$out" in *yabai*) fail "yabai follow-up still printed: $out" ;; esac
 }
 
 test_services_all_running() {
     fake brew services-list 0 "borders    started mfischbach x
 sketchybar started mfischbach y"
-    mkdir -p "$HOME/Library/LaunchAgents"
-    touch "$HOME/Library/LaunchAgents/com.koekeishiya.skhd.plist"
     bootstrap --only services >/dev/null
     assert_log_lacks 'services start'
-    assert_log_lacks '^skhd'
 }
 
 test_services_check_no_writes() {
@@ -86,7 +81,6 @@ test_services_check_no_writes() {
     out=$(bootstrap --check --only services) || rc=$?
     assert_eq 1 "$rc" "return code"
     assert_log_lacks 'services start'
-    assert_log_lacks '^skhd'
     assert_contains "sketchybar not running" "$out"
 }
 
