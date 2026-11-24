@@ -53,6 +53,9 @@ fi
 DOTFILES=$(cd "$(dirname "$0")" && pwd)
 BREW=${BREW:-/opt/homebrew/bin/brew}
 export DOTFILES BREW MODE
+# brew's tools for every step, also with --only in a shell that predates
+# the Homebrew install (the brew step adds the rest of shellenv)
+case ":$PATH:" in *":$(dirname "$BREW"):"*) ;; *) PATH="$PATH:$(dirname "$BREW")" ;; esac
 
 # shellcheck source=lib/common.sh
 . "$DOTFILES/lib/common.sh"

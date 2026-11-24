@@ -113,7 +113,7 @@ test_stow_missing_fails_clearly() {
         [ "$(basename "$f")" = stow ] || ln -s "$f" "$FAKE/bin/"
     done
     rc=0
-    out=$(PATH="$FAKE/bin:/usr/bin:/bin" bootstrap --only stow 2>&1) || rc=$?
+    out=$(PATH="$FAKE/bin:/usr/bin:/bin" BREW="$FAKE/bin/brew" bootstrap --only stow 2>&1) || rc=$?
     assert_eq 1 "$rc" "return code"
     assert_contains "stow is not installed" "$out"
     case "$out" in *"command not found"*) fail "raw shell error: $out" ;; esac

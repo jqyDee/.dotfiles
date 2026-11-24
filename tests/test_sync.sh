@@ -74,3 +74,19 @@ test_sync_failed_first_sync_is_a_followup() {
     assert_contains "unison cs-sync -batch -auto" "$out"
     assert_log_has '^launchctl bootstrap'
 }
+
+test_sync_only_finds_brew_tools_without_path() {
+    # --only sync in a shell started before Homebrew: its bin dir isn't on PATH
+    mkdir -p "$HOME/$ICLOUD/CS-Studies" "$FAKE/hb/bin" "$HOME/.unison"
+    xattr -w "$PIN" 1 "$HOME/$ICLOUD/CS-Studies"
+    touch "$HOME/.unison/cs-sync.prf"
+    ln -s "$TESTS/stubs/_stub" "$FAKE/hb/bin/brew"
+    ln -s "$TESTS/stubs/_stub" "$FAKE/hb/bin/unison"
+    mkdir -p "$FAKE/nounison" && for t in "$TESTS"/stubs/*; do
+        case $(basename "$t") in unison | brew) ;; *) ln -s "$t" "$FAKE/nounison/" ;; esac
+    done
+    rc=0
+    out=$(PATH="$FAKE/nounison:/usr/bin:/bin" BREW="$FAKE/hb/bin/brew" bootstrap --only sync 2>&1) || rc=$?
+    assert_eq 0 "$rc" "return code ($out)"
+    case "$out" in *"unison is not installed"*) fail "unison not found: $out" ;; esac
+}
