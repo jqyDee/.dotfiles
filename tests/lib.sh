@@ -12,10 +12,12 @@ sandbox() {
     export PATH="$TESTS/stubs:/usr/bin:/bin"
     export BREW="$TESTS/stubs/brew" STUB_LOG="$root/fake/calls.log"
     export DOTFILES="$REPO" XCODE_WAIT=1 XCODE_POLL=0
+    export REPOS_FILE="$root/fake/repos.txt"
     unset XDG_STATE_HOME NO_BREW MODE
     mkdir -p "$HOME/.local/state/dotfiles" "$FAKE"
     touch "$HOME/.local/state/dotfiles/signin-done"
     : >"$STUB_LOG"
+    : >"$REPOS_FILE"
 }
 
 fail() {
@@ -60,11 +62,14 @@ fake() {
     if [ $# -ge 4 ]; then printf '%s\n' "$4" >"$FAKE/$1/$2.out"; fi
 }
 
-# every extras target present, udo-keyboard agent loaded (launchctl rc 0)
+# every extras target present, udo-keyboard agent loaded (launchctl rc 0),
+# the unison sync set up
 all_extras_present() {
     mkdir -p "$HOME/.zsh/zsh-autosuggestions" "$HOME/.zsh/zsh-syntax-highlighting" \
         "$HOME/.tmux/plugins/tpm" "$HOME/.local/share/sketchybar_lua" \
-        "$HOME/Library/Fonts"
+        "$HOME/Library/Fonts" "$HOME/.unison" \
+        "$HOME/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"
+    xattr -w 'com.apple.fileprovider.pinned#PX' 1 "$HOME/Library/Mobile Documents/com~apple~CloudDocs/CS-Studies"
     touch "$HOME/.local/share/sketchybar_lua/sketchybar.so" \
-        "$HOME/Library/Fonts/sketchybar-app-font.ttf"
+        "$HOME/Library/Fonts/sketchybar-app-font.ttf" "$HOME/.unison/cs-sync.prf"
 }

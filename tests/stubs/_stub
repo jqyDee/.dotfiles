@@ -60,6 +60,8 @@ if [ "$tool" = defaults ]; then
     exit 0
 fi
 
+# a per-subcommand result (<tool>-<first arg>) wins over the tool-wide one
+[ -f "$FAKE/$tool/$tool-${1:-}.rc" ] && key="$tool-${1:-}"
 rc=0
 [ -f "$FAKE/$tool/$key.rc" ] && rc=$(cat "$FAKE/$tool/$key.rc")
 [ -f "$FAKE/$tool/$key.out" ] && cat "$FAKE/$tool/$key.out"

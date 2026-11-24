@@ -43,6 +43,7 @@ touch "$LOG_FILE"
 # --- Create directories ---
 mkdir -p "$SCRIPT_DIR"
 mkdir -p "$UNISON_DIR"
+mkdir -p "$(dirname "$PLIST_PATH")"
 
 # --- Create Unison profile (no quotes!) ---
 cat > "$PROFILE_PATH" <<EOF
@@ -125,10 +126,13 @@ cat > "$PLIST_PATH" <<EOF
 EOF
 
 # --- Load LaunchAgent ---
-launchctl unload "$PLIST_PATH" 2>/dev/null || true
-launchctl load "$PLIST_PATH" 2>/dev/null || {
-    launchctl bootstrap gui/$(id -u) "$PLIST_PATH" 2>/dev/null || true
-}
+# NO_LOAD=1: bootstrap runs the first sync itself, then loads the agent
+if [ -z "${NO_LOAD:-}" ]; then
+    launchctl unload "$PLIST_PATH" 2>/dev/null || true
+    launchctl load "$PLIST_PATH" 2>/dev/null || {
+        launchctl bootstrap gui/$(id -u) "$PLIST_PATH" 2>/dev/null || true
+    }
+fi
 
 echo "✅ Installed Unison bidirectional sync (iCloud-safe)"
 echo "   - Source: $SOURCE_DIR"

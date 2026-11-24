@@ -1,0 +1,7 @@
+# Git repos bootstrap clones (with submodules) when they are missing.
+# --check looks at every repo under ~/Developer (and the dotfiles), listed
+# here or not, for uncommitted or unpushed work.
+# One per line: <path under ~> <url>
+Developer/cs-degree           git@github.com:jqyDee/cs-degree.git
+Developer/projects/udo        git@github.com:jqyDee/udo.git
+Developer/projects/udo-dash   git@github.com:jqyDee/udo-dash.git
