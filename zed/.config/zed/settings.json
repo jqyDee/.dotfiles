@@ -234,7 +234,7 @@
     },
     "claude-acp": {
       "default_config_options": {
-        "mode": "auto",
+        "mode": "default",
         "effort": "medium",
         "model": "opus"
       },
