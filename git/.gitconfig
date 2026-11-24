@@ -6,6 +6,9 @@
 	autocrlf = input
 [gpg]
 	format = ssh
+[gpg "ssh"]
+	# sign through the Bitwarden agent, see ~/.config/git/ssh-sign
+	program = /Users/mfischbach/.config/git/ssh-sign
 [commit]
 	gpgsign = true
 [tag]

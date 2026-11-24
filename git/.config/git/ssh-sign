@@ -1,0 +1,4 @@
+#!/bin/sh
+# git signs commits through ssh-keygen, which ignores ~/.ssh/config (and so
+# its IdentityAgent): send it to the Bitwarden agent that holds the key.
+SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock" exec ssh-keygen "$@"
