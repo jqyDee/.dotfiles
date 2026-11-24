@@ -24,6 +24,10 @@ brew "felixkratz/formulae/sketchybar", trusted: true
 # udo-keyboard calls `udo status`
 brew "jqydee/tap/udo"
 
+# repos (ssh keys) and sync steps
+brew "unison"
+cask "bitwarden"
+
 cask "nikitabobko/tap/aerospace", trusted: true
 cask "alacritty"
 cask "font-hack-nerd-font"
