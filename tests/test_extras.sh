@@ -78,3 +78,30 @@ test_udo_keyboard_missing_installer_fails_clearly() {
     assert_contains "udo-keyboard install.sh missing" "$out"
     case "$out" in *"No such file or directory"*) fail "raw shell error: $out" ;; esac
 }
+
+test_aerospace_started_when_not_running() {
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    fake pgrep pgrep 1
+    out=$(bootstrap --only services)
+    assert_log_has '^open -a AeroSpace$'
+    assert_contains "Accessibility" "$out"
+}
+
+test_aerospace_running_left_alone() {
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    bootstrap --only services >/dev/null
+    assert_log_lacks '^open'
+}
+
+test_aerospace_check_reports_not_running() {
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    fake pgrep pgrep 1
+    rc=0
+    out=$(bootstrap --check --only services) || rc=$?
+    assert_eq 1 "$rc" "return code"
+    assert_contains "AeroSpace not running" "$out"
+    assert_log_lacks '^open'
+}

@@ -78,5 +78,17 @@ step_services() {
         "$BREW" services start "$name" >/dev/null && note_change "started $name" || failed=1
     done
 
+    # Not a brew service: start-at-login only takes effect once it has run
+    if ! pgrep -x AeroSpace >/dev/null; then
+        if [ "$MODE" = check ]; then
+            note_drift "AeroSpace not running"
+        elif open -a AeroSpace; then
+            note_change "started AeroSpace"
+            note_followup "allow AeroSpace in System Settings → Privacy & Security → Accessibility"
+        else
+            failed=1
+        fi
+    fi
+
     return "$failed"
 }

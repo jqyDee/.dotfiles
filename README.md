@@ -52,7 +52,7 @@ Exit codes: `0` ok, `1` drift or a failed step, `2` stow conflict, `64` wrong us
 4. Links every stow package. If a real file is in the way it stops before linking anything and prints the paths: move those files away and run it again. It never uses `--adopt`.
 5. Applies the settings in `macos.sh`. Only values that differ are written; Dock and Finder restart only if one of their settings changed. Keyboard, trackpad and menu bar settings need a log out.
 6. Extras: zsh plugins (`~/.zsh`), tpm (`~/.tmux/plugins/tpm`, then `prefix + I` in tmux), SbarLua and the sketchybar app font, the udo-keyboard LaunchAgent.
-7. Starts the sketchybar and borders services.
+7. Starts the sketchybar and borders services, and AeroSpace (which then starts at login by itself).
 
 The sketchybar event providers in `helpers/` are compiled on every start (`helpers/init.lua` runs `make`).
 
