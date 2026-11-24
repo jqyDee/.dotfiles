@@ -11,4 +11,5 @@ children = [
 id = "01a121a4-3a93-71ef-8651-e439e071cdc3"
 name = "Fahrrad Entfernen Zettel"
 created_at = "2026-10-09T19:09:33.459335+02:00"
+done_at = "2026-11-23T20:09:00.911302+01:00"
 due_date = "2026-10-30T12:00:00+01:00"
