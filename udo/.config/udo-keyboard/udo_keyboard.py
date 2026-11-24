@@ -17,6 +17,10 @@ ASCII, NUL-padded. Must match the firmware's packet.h (corne-zmk repo,
 modules/udo-status/include/udo_status/packet.h).
 """
 
+# `dict | None` annotations on the system python3 (3.9), which install.sh
+# builds the venv from when no newer one is installed
+from __future__ import annotations
+
 import os
 import shutil
 import json

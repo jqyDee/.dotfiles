@@ -1,4 +1,5 @@
 """Tests for udo_keyboard. Run: python3 -m unittest host/test_udo_keyboard.py"""
+import logging
 import os
 import sys
 import unittest
@@ -128,8 +129,12 @@ class HealthLogTest(unittest.TestCase):
 
     def test_first_success_is_silent(self):
         health = uk.Health("udo")
-        with self.assertNoLogs("udo-status", level="INFO"):
+        # assertNoLogs is 3.10+; log a marker so assertLogs has a record
+        logger = logging.getLogger("udo-status")
+        with self.assertLogs(logger, level="INFO") as logs:
             health.update(True)
+            logger.info("marker")
+        self.assertEqual(logs.output, ["INFO:udo-status:marker"])
 
 
 class ChangeTest(unittest.TestCase):
