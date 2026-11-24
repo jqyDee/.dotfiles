@@ -87,6 +87,8 @@ cask "nikitabobko/tap/aerospace", trusted: true
 cask "alacritty"
 # Terminal interface for Antigravity agents
 cask "antigravity-cli"
+# Password manager; its SSH agent holds the SSH keys
+cask "bitwarden"
 # Anthropic's official Claude AI desktop app
 cask "claude"
 # Terminal-based AI coding assistant

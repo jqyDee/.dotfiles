@@ -23,7 +23,7 @@ step_bundle() {
     done <<<"$out"
 }
 
-PACKAGES=(aerospace alacritty borders gh git ideavim nvim sketchybar starship tmux typst udo zed zsh)
+PACKAGES=(aerospace alacritty borders gh git ideavim nvim sketchybar ssh starship tmux typst udo zed zsh)
 
 # A stow conflict (a real file where a link should go) ends the whole run
 # with exit 2, before anything is linked. No --adopt, nothing is moved.
@@ -33,6 +33,11 @@ step_stow() {
     if ! command -v stow >/dev/null; then
         log_warn "stow is not installed (it comes from the Brewfile; did the brew or bundle step fail?)"
         return 1
+    fi
+    # Without a real ~/.ssh, stow would link the whole folder into the repo
+    # and known_hosts would land in git
+    if [ "$MODE" = apply ] && [ ! -d "$HOME/.ssh" ]; then
+        mkdir -m 700 "$HOME/.ssh" || return 1
     fi
     out=$(stow -n -v -d "$DOTFILES" -t "$HOME" "${PACKAGES[@]}" 2>&1) || rc=$?
 

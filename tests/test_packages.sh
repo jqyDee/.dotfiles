@@ -52,7 +52,7 @@ test_brewfile_parses() {
     done
 }
 
-PKGS="aerospace alacritty borders gh git ideavim nvim sketchybar starship tmux typst udo zed zsh"
+PKGS="aerospace alacritty borders gh git ideavim nvim sketchybar ssh starship tmux typst udo zed zsh"
 
 test_stow_conflict_aborts() {
     fake stow stow 1 "WARNING! stowing zsh would cause conflicts:
@@ -96,4 +96,15 @@ test_bundle_check_ignores_outdated() {
     # without --no-upgrade, brew counts every outdated package as missing
     bootstrap --check --only bundle >/dev/null
     assert_log_has '^brew bundle check .*--no-upgrade'
+}
+
+test_stow_creates_real_ssh_dir() {
+    bootstrap --only stow >/dev/null
+    [ -d "$HOME/.ssh" ] && [ ! -L "$HOME/.ssh" ] || fail ".ssh is not a real folder"
+    assert_eq 700 "$(stat -f %Lp "$HOME/.ssh")" ".ssh mode"
+}
+
+test_stow_check_leaves_ssh_dir_alone() {
+    bootstrap --check --only stow >/dev/null || true
+    [ ! -e "$HOME/.ssh" ] || fail "check mode created .ssh"
 }
