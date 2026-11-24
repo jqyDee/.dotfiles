@@ -9,6 +9,8 @@
 [gpg "ssh"]
 	# sign through the Bitwarden agent, see ~/.config/git/ssh-sign
 	program = /Users/mfischbach/.config/git/ssh-sign
+	# trusted keys for git log --show-signature
+	allowedSignersFile = /Users/mfischbach/.config/git/allowed_signers
 [commit]
 	gpgsign = true
 [tag]
