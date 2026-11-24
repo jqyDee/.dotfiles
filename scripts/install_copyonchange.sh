@@ -61,6 +61,7 @@ ignore = Name {.venv,venv}
 ignore = Name __pycache__
 ignore = Name {build,CMakeFiles}
 ignore = Name .cache
+ignore = Name .git
 
 auto = true
 # The wrapper (unison_sync.sh) captures the output of each run
