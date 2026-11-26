@@ -10,17 +10,38 @@ AEROSPACE="$(command -v aerospace || echo /opt/homebrew/bin/aerospace)"
 # Resolve the stow symlink so sed edits the real file instead of replacing the link
 CONFIG="$(realpath "$HOME/.config/aerospace/aerospace.toml")"
 
-# Only one watcher at a time
+# Errors go to a log, otherwise a dying watcher goes unnoticed (started by AeroSpace, no terminal)
+LOG="${TMPDIR:-/tmp}/ffm-fullscreen-guard.log"
+[ -f "$LOG" ] && tail -n 200 "$LOG" >"$LOG.tmp" && mv "$LOG.tmp" "$LOG"
+exec 2>>"$LOG"
+log() { echo "$(date '+%F %T') [$$] $*" >&2; }
+
+# Only one watcher at a time. The pid may have been reused after a reboot,
+# so only kill it if it still is this script
 PIDFILE="${TMPDIR:-/tmp}/ffm-fullscreen-guard.pid"
 if [ -f "$PIDFILE" ]; then
     old=$(cat "$PIDFILE")
-    pkill -P "$old" 2>/dev/null
-    kill "$old" 2>/dev/null
+    if ps -p "$old" -o command= 2>/dev/null | grep -q ffm-fullscreen-guard; then
+        pkill -P "$old" 2>/dev/null
+        kill "$old" 2>/dev/null
+    fi
 fi
 echo $$ >"$PIDFILE"
+log started
+trap 'log "exiting"; set_ffm true' EXIT
 
 is_fullscreen() {
-    [ "$(osascript -e 'tell application "System Events" to tell (first process whose frontmost is true) to get value of attribute "AXFullScreen" of (value of attribute "AXFocusedWindow")' 2>/dev/null)" = true ]
+    # Needs Privacy & Security > Automation: AeroSpace > System Events,
+    # without it osascript fails and every window looks non-fullscreen
+    local out
+    out="$(osascript -e 'tell application "System Events" to tell (first process whose frontmost is true) to get value of attribute "AXFullScreen" of (value of attribute "AXFocusedWindow")' 2>&1)"
+    case "$out" in
+        true) return 0 ;;
+        false) return 1 ;;
+        # Some frontmost apps have no focused window (e.g. Finder on the desktop)
+        *"AXFocusedWindow"*|*"-1719"*|*"-1728"*) return 1 ;;
+        *) log "osascript: $out"; return 1 ;;
+    esac
 }
 
 set_ffm() {
@@ -49,12 +70,11 @@ check() {
 }
 
 # The first event is the current state; resubscribe if the connection drops
-while pgrep -x AeroSpace >/dev/null; do
+# -a: macOS pgrep skips its own ancestors, and AeroSpace is the parent when it starts this script
+while pgrep -a -x AeroSpace >/dev/null; do
     "$AEROSPACE" subscribe focus-changed | while IFS= read -r _; do
-        # Only the latest focus matters: drop events that queued up meanwhile
-        while IFS= read -r -t 0.1 _; do :; done
         check
     done
+    log "subscribe ended, resubscribing"
     sleep 2
 done
-set_ffm true
