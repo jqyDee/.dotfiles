@@ -14,7 +14,14 @@ if [ "$tool" = brew ]; then
 fi
 
 if [ "$tool" = defaults ]; then
-    dir="$FAKE/defaults/${2:-}"
+    # -currentHost (setting_host, --record): its own values and plists
+    host=
+    if [ "${1:-}" = -currentHost ]; then
+        host=/host
+        shift
+    fi
+    plists="$FAKE/plists$host"
+    dir="$FAKE/defaults$host/${2:-}"
     case "${1:-}" in
     read)
         [ -f "$dir/$3" ] || {
@@ -29,7 +36,7 @@ if [ "$tool" = defaults ]; then
         ;;
     domains)
         # plists under $FAKE/plists/<domain>.plist (NSGlobalDomain isn't listed by the real one)
-        for f in "$FAKE"/plists/*.plist; do
+        for f in "$plists"/*.plist; do
             [ -e "$f" ] || continue
             d=$(basename "$f" .plist)
             d=${d%.after}
@@ -37,17 +44,37 @@ if [ "$tool" = defaults ]; then
         done | sort -u | paste -sd ',' - | sed 's/,/, /g'
         ;;
     export)
-        # first export of a domain copies <domain>.plist, later ones <domain>.after.plist if present
-        src="$FAKE/plists/$2.plist"
-        if [ -e "$FAKE/plists/.exported-$2" ] && [ -e "$FAKE/plists/$2.after.plist" ]; then
-            src="$FAKE/plists/$2.after.plist"
+        # to stdout (setting_hotkey): the dictionaries written with -dict-add
+        if [ "${3:-}" = - ]; then
+            printf '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict>'
+            for d in "$dir"/*.dict; do
+                [ -d "$d" ] || continue
+                printf '<key>%s</key><dict>' "$(basename "$d" .dict)"
+                for e in "$d"/*; do
+                    [ -f "$e" ] && printf '<key>%s</key>%s' "$(basename "$e")" "$(cat "$e")"
+                done
+                printf '</dict>'
+            done
+            printf '</dict></plist>\n'
+            exit 0
         fi
-        touch "$FAKE/plists/.exported-$2"
+        # first export of a domain copies <domain>.plist, later ones <domain>.after.plist if present
+        src="$plists/$2.plist"
+        if [ -e "$plists/.exported-$2" ] && [ -e "$plists/$2.after.plist" ]; then
+            src="$plists/$2.after.plist"
+        fi
+        mkdir -p "$plists"
+        touch "$plists/.exported-$2"
         [ -e "$src" ] || exit 1
         cp "$src" "$3"
         ;;
     write)
         mkdir -p "$dir"
+        if [ "${4:-}" = -dict-add ]; then
+            mkdir -p "$dir/$3.dict"
+            printf '%s' "$6" >"$dir/$3.dict/$5"
+            exit 0
+        fi
         case "$4" in
         -bool) case "$5" in true | yes | 1) v=1 ;; *) v=0 ;; esac; t=boolean ;;
         -int) v=$5 t=integer ;;
