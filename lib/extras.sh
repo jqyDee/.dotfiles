@@ -67,14 +67,30 @@ _extras_wallpaper() {
     note_change "set wallpaper to $want"
 }
 
+# True once macOS knows the font: a font file curl drops into ~/Library/Fonts
+# is not usable until fontd has registered it.
+_font_registered() {
+    osascript -l JavaScript -e "ObjC.import('AppKit'); if (\$.NSFont.fontWithNameSize('$1', 12).isNil()) throw 'missing'" >/dev/null 2>&1
+}
+
+# Sketchybar resolves fonts when it starts: one that was running before the app
+# font arrived shows ligature names (":terminal:") instead of icons. The marker
+# tells the services step to restart it, also in a later --only services run.
+_extras_app_font() {
+    local font="$HOME/Library/Fonts/sketchybar-app-font.ttf"
+    [ -e "$font" ] && return 0
+    ensure_download https://github.com/kvndrsslr/sketchybar-app-font/releases/latest/download/sketchybar-app-font.ttf \
+        "$font" || return 1
+    [ "$MODE" = check ] || { mkdir -p "$STATE_DIR" && touch "$STATE_DIR/sketchybar-restart"; }
+}
+
 step_extras() {
     local failed=0
     ensure_clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.zsh/zsh-autosuggestions" || failed=1
     ensure_clone https://github.com/zsh-users/zsh-syntax-highlighting "$HOME/.zsh/zsh-syntax-highlighting" || failed=1
     ensure_clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" || failed=1
     _extras_sbarlua || failed=1
-    ensure_download https://github.com/kvndrsslr/sketchybar-app-font/releases/latest/download/sketchybar-app-font.ttf \
-        "$HOME/Library/Fonts/sketchybar-app-font.ttf" || failed=1
+    _extras_app_font || failed=1
     _extras_udo_keyboard || failed=1
     _extras_wallpaper || failed=1
     return "$failed"
@@ -84,6 +100,26 @@ step_services() {
     [ -z "${NO_BREW:-}" ] || return 0
     local list name status failed=0
     list=$("$BREW" services list 2>/dev/null) || list=""
+
+    # A new app font: wait for macOS to register it, then start sketchybar
+    # fresh so it picks the font up (see _extras_app_font)
+    if [ "$MODE" != check ] && [ -e "$STATE_DIR/sketchybar-restart" ]; then
+        local tries=0
+        until _font_registered sketchybar-app-font || [ "$tries" -ge "${FONT_WAIT:-20}" ]; do
+            sleep 1
+            tries=$((tries + 1))
+        done
+        if ! _font_registered sketchybar-app-font; then
+            note_followup "sketchybar-app-font not registered yet: log out and in, then brew services restart sketchybar"
+        else
+            # not running: the loop below starts it, now with the font
+            if [ "$(awk '$1 == "sketchybar" { print $2 }' <<<"$list")" = started ]; then
+                "$BREW" services restart sketchybar >/dev/null && note_change "restarted sketchybar for the app font" || failed=1
+            fi
+            rm -f "$STATE_DIR/sketchybar-restart"
+        fi
+    fi
+
     for name in sketchybar borders; do
         status=$(awk -v n="$name" '$1 == n { print $2 }' <<<"$list")
         [ "$status" = started ] && continue

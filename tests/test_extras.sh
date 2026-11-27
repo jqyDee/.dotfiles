@@ -128,3 +128,38 @@ test_wallpaper_check_no_writes() {
     assert_contains "wallpaper is not" "$out"
     assert_log_lacks 'set picture'
 }
+
+test_new_app_font_restarts_running_sketchybar() {
+    all_extras_present
+    rm "$HOME/Library/Fonts/sketchybar-app-font.ttf"
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    bootstrap --only extras >/dev/null
+    assert_log_has '^curl .*sketchybar-app-font.ttf'
+    bootstrap --only services >/dev/null
+    assert_log_has '^brew services restart sketchybar$'
+    : >"$STUB_LOG"
+    bootstrap --only services >/dev/null
+    assert_log_lacks 'services restart'
+}
+
+test_existing_app_font_leaves_sketchybar_alone() {
+    all_extras_present
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    bootstrap --only extras >/dev/null
+    bootstrap --only services >/dev/null
+    assert_log_lacks 'services restart'
+}
+
+test_unregistered_app_font_asks_for_relogin() {
+    all_extras_present
+    rm "$HOME/Library/Fonts/sketchybar-app-font.ttf"
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    bootstrap --only extras >/dev/null
+    fake osascript osascript 1
+    out=$(FONT_WAIT=0 bootstrap --only services)
+    assert_log_lacks 'services restart'
+    assert_contains "log out and in" "$out"
+}
