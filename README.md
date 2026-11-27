@@ -64,6 +64,8 @@ AeroSpace and sketchybar ask for Accessibility / Screen Recording access when th
 ### Unison sync
 After signing in to iCloud: `~/.dotfiles/scripts/install_copyonchange.sh`.
 
+If the sync filled `~/Developer/cs-degree` before the repo was cloned (say the clone failed because Bitwarden was locked), `./bootstrap.sh --only repos` clones the repo there anyway. It copies the synced files over the clone, so the newer work shows up as uncommitted changes, and it keeps the old folder as `~/Developer/cs-degree.before-clone-<time>`. Delete that copy once `git status` looks right.
+
 ## Not managed
 - Cemu and WiiUDownloader: no Homebrew casks, download them by hand.
 - Microsoft Office: installed outside the Brewfile.

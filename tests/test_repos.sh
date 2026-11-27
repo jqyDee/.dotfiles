@@ -47,15 +47,16 @@ test_repos_clone_failure_points_to_ssh() {
     assert_contains "./bootstrap.sh --only repos" "$out"
 }
 
-test_repos_folder_in_the_way() {
+test_repos_check_folder_in_the_way() {
     two_repos
     mkdir -p "$HOME/Developer/a" "$HOME/Developer/projects/b/.git"
     touch "$HOME/Developer/a/notes.txt"
     rc=0
-    out=$(bootstrap --only repos 2>&1) || rc=$?
+    out=$(bootstrap --check --only repos 2>&1) || rc=$?
     assert_eq 1 "$rc" "return code"
     assert_contains "~/Developer/a exists but is not a git repo" "$out"
     assert_log_lacks '^git clone'
+    assert_file "$HOME/Developer/a/notes.txt"
 }
 
 test_repos_empty_folder_is_cloned_into() {
@@ -163,4 +164,43 @@ test_repo_check_pushed_branch_without_upstream_is_fine() {
     git -C "$r" push -q origin topic 2>/dev/null   # pushed, but no upstream set
     check_repos
     case "$out" in *"Developer/merged"*) fail "pushed branch reported: $out" ;; esac
+}
+
+# A folder the Unison sync filled before the clone: the clone goes in, the
+# synced files stay on top of it as changes, the old folder is kept
+test_repos_adopts_folder_in_the_way() {
+    real_git
+    pushed_repo "$FAKE/seed"
+    printf 'old\n' >"$FAKE/seed/notes.txt" && printf 'x\n' >"$FAKE/seed/only-in-git.txt"
+    git -C "$FAKE/seed" add . && git -C "$FAKE/seed" commit -q -m files && git -C "$FAKE/seed" push -q 2>/dev/null
+    echo "Developer/a $FAKE/remote-seed.git" >"$REPOS_FILE"
+    mkdir -p "$HOME/Developer/a"
+    printf 'new\n' >"$HOME/Developer/a/notes.txt"
+    printf 'y\n' >"$HOME/Developer/a/untracked.txt"
+    out=$(bootstrap --only repos 2>&1)
+    a="$HOME/Developer/a"
+    assert_file "$a/.git"
+    assert_eq new "$(cat "$a/notes.txt")" "synced file kept"
+    assert_file "$a/only-in-git.txt"
+    assert_eq " M notes.txt|?? untracked.txt|" "$(git -C "$a" status --porcelain | tr '\n' '|')" "status"
+    backup=$(ls -d "$HOME"/Developer/a.before-clone-*)
+    assert_eq new "$(cat "$backup/notes.txt")" "backup"
+    assert_no_file "$HOME/Developer/.a.clone"
+    assert_contains "cloned ~/Developer/a over the files already there" "$out"
+    assert_log_has "^launchctl bootout gui/[0-9]+/com.user.unison.sync$"
+    assert_log_has "^launchctl bootstrap gui/[0-9]+ .*com.user.unison.sync.plist$"
+}
+
+test_repos_adopt_clone_failure_leaves_folder() {
+    two_repos
+    mkdir -p "$HOME/Developer/a" "$HOME/Developer/projects/b/.git"
+    touch "$HOME/Developer/a/notes.txt"
+    fake git git 128 "git@github.com: Permission denied (publickey)."
+    rc=0
+    out=$(bootstrap --only repos 2>&1) || rc=$?
+    assert_eq 1 "$rc" "return code"
+    assert_contains "clone ~/Developer/a over the files already there (is Bitwarden unlocked?)" "$out"
+    assert_file "$HOME/Developer/a/notes.txt"
+    assert_no_file "$HOME/Developer/.a.clone"
+    [ -z "$(ls -d "$HOME"/Developer/a.before-clone-* 2>/dev/null)" ] || fail "backup made on failure"
 }

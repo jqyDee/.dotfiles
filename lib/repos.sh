@@ -24,15 +24,49 @@ _clone_repo() {
         git switch --quiet "$b"'
 }
 
+# _adopt_repo <dest> <url>: <dest> has files but no .git, e.g. the Unison sync
+# filled it from iCloud before the clone. Clone next to it, copy the files on
+# top (they are the newer work: they show up as changes; --ignore-times, as
+# a synced file can match the clone's size and mtime), then swap the two.
+# The old folder is kept as <dest>.before-clone-<time>, path in ADOPT_BACKUP.
+_adopt_repo() {
+    local dest=$1 url=$2 tmp paused=0
+    tmp="$(dirname "$dest")/.$(basename "$dest").clone"
+    rm -rf "$tmp"
+    _clone_repo "$tmp" "$url" || {
+        rm -rf "$tmp"
+        return 1
+    }
+    rsync -a --ignore-times --exclude .git "$dest/" "$tmp/" || {
+        rm -rf "$tmp"
+        return 1
+    }
+    ADOPT_BACKUP="$dest.before-clone-$(date +%Y%m%d-%H%M%S)"
+    # The sync agent watches the folder: keep it from running mid-swap
+    if [ -n "${SYNC_AGENT:-}" ] && launchctl print "gui/$(id -u)/$SYNC_AGENT" >/dev/null 2>&1; then
+        launchctl bootout "gui/$(id -u)/$SYNC_AGENT" 2>/dev/null && paused=1
+    fi
+    mv "$dest" "$ADOPT_BACKUP" && mv "$tmp" "$dest"
+    local rc=$?
+    [ "$paused" -eq 0 ] || launchctl bootstrap "gui/$(id -u)" "$SYNC_PLIST" || true
+    return "$rc"
+}
+
 step_repos() {
     local path url dest failed=0
     while read -r path url; do
         dest="$HOME/$path"
         [ -e "$dest/.git" ] && continue
         if [ -n "$(ls -A "$dest" 2>/dev/null)" ]; then
-            # shellcheck disable=SC2088 # ~ is shown, not expanded
-            note_failure "~/$path exists but is not a git repo: move it away, then re-run"
-            failed=1
+            if [ "$MODE" = check ]; then
+                # shellcheck disable=SC2088 # ~ is shown, not expanded
+                note_drift "~/$path exists but is not a git repo (bootstrap clones it and keeps the files)"
+            elif _adopt_repo "$dest" "$url"; then
+                note_change "cloned ~/$path over the files already there (old folder: ~/${ADOPT_BACKUP#"$HOME/"})"
+            else
+                note_failure "clone ~/$path over the files already there (is Bitwarden unlocked?)"
+                failed=1
+            fi
             continue
         fi
         if [ "$MODE" = check ]; then
