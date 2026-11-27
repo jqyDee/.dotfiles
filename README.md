@@ -6,8 +6,9 @@ Every top-level folder (except `scripts/`, `lib/`, `tests/`) is a stow package t
 | Package | Links to | What |
 |---|---|---|
 | `aerospace` | `~/.config/aerospace` | AeroSpace tiling window manager |
-| `alacritty` | `~/.config/alacritty` | terminal (Gruvbox Material) |
+| `alacritty` | `~/.config/alacritty` | old terminal, replaced by Ghostty; not linked by bootstrap (`stow alacritty` to use it) |
 | `borders` | `~/.config/borders` | JankyBorders window borders |
+| `ghostty` | `~/.config/ghostty` | terminal (Gruvbox Material), runs tmux |
 | `gh` | `~/.config/gh` | GitHub CLI config (token lives in the keychain) |
 | `git` | `~/.gitconfig`, `~/.config/git/ignore` | identity, SSH commit signing, global ignore |
 | `ideavim` | `~/.ideavimrc` | IdeaVim for JetBrains IDEs |

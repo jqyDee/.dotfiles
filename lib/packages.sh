@@ -50,7 +50,7 @@ step_bundle() {
     done <<<"$out"
 }
 
-PACKAGES=(aerospace alacritty borders gh git ideavim nvim sketchybar ssh starship tmux typst udo zed zsh)
+PACKAGES=(aerospace borders ghostty gh git ideavim nvim sketchybar ssh starship tmux typst udo zed zsh)
 
 # A stow conflict (a real file where a link should go) ends the whole run
 # with exit 2, before anything is linked. No --adopt, nothing is moved.

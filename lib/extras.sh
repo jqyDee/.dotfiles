@@ -96,6 +96,30 @@ step_extras() {
     return "$failed"
 }
 
+TMUX_AGENT=local.tmux.main
+TMUX_PLIST="$HOME/Library/LaunchAgents/$TMUX_AGENT.plist"
+
+# The tmux server runs as a LaunchAgent, not from Ghostty (see the plist)
+_services_tmux() {
+    local src="$DOTFILES/tmux/.config/tmux/$TMUX_AGENT.plist"
+    if [ "$MODE" = check ]; then
+        cmp -s "$src" "$TMUX_PLIST" || note_drift "tmux agent not installed or outdated"
+        launchctl print "gui/$(id -u)/$TMUX_AGENT" >/dev/null 2>&1 || note_drift "tmux agent not loaded"
+        return 0
+    fi
+    if ! cmp -s "$src" "$TMUX_PLIST"; then
+        mkdir -p "$(dirname "$TMUX_PLIST")"
+        # bootout only unloads the job: a running tmux server stays up
+        launchctl bootout "gui/$(id -u)/$TMUX_AGENT" 2>/dev/null || true
+        cp "$src" "$TMUX_PLIST" || return 1
+        launchctl bootstrap "gui/$(id -u)" "$TMUX_PLIST" || return 1
+        note_change "installed tmux agent (tmux session main at login)"
+    elif ! launchctl print "gui/$(id -u)/$TMUX_AGENT" >/dev/null 2>&1; then
+        launchctl bootstrap "gui/$(id -u)" "$TMUX_PLIST" || return 1
+        note_change "loaded tmux agent"
+    fi
+}
+
 step_services() {
     [ -z "${NO_BREW:-}" ] || return 0
     local list name status failed=0
@@ -129,6 +153,8 @@ step_services() {
         fi
         "$BREW" services start "$name" >/dev/null && note_change "started $name" || failed=1
     done
+
+    _services_tmux || failed=1
 
     # Not a brew service: start-at-login only takes effect once it has run
     if ! pgrep -x AeroSpace >/dev/null; then

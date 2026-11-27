@@ -163,3 +163,34 @@ sketchybar started mfischbach y"
     assert_log_lacks 'services restart'
     assert_contains "log out and in" "$out"
 }
+
+test_services_tmux_agent_installed() {
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    bootstrap --only services >/dev/null
+    plist="$HOME/Library/LaunchAgents/local.tmux.main.plist"
+    assert_file "$plist"
+    cmp -s "$REPO/tmux/.config/tmux/local.tmux.main.plist" "$plist" || fail "plist not copied as is"
+    assert_log_has '^launchctl bootstrap gui/[0-9]+ .*local.tmux.main.plist$'
+}
+
+test_services_tmux_agent_up_to_date() {
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    mkdir -p "$HOME/Library/LaunchAgents"
+    cp "$REPO/tmux/.config/tmux/local.tmux.main.plist" "$HOME/Library/LaunchAgents/"
+    bootstrap --only services >/dev/null
+    assert_log_lacks '^launchctl (bootstrap|bootout)'
+}
+
+test_services_tmux_agent_check_no_writes() {
+    fake brew services-list 0 "borders    started mfischbach x
+sketchybar started mfischbach y"
+    fake launchctl launchctl 1
+    rc=0
+    out=$(bootstrap --check --only services) || rc=$?
+    assert_eq 1 "$rc" "return code"
+    assert_log_lacks '^launchctl (bootstrap|bootout)'
+    assert_contains "tmux agent not installed or outdated" "$out"
+    assert_contains "tmux agent not loaded" "$out"
+}

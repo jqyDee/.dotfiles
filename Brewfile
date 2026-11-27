@@ -98,6 +98,10 @@ cask "firefox"
 cask "font-sf-mono"
 cask "font-sf-pro"
 cask "font-source-sans-3"
+# Hack font patched with Nerd Font icons (terminal font)
+cask "font-hack-nerd-font"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
 # Web browser
 cask "google-chrome"
 # Java IDE by JetBrains

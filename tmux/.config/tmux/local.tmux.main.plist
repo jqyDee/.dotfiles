@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Installed by bootstrap (step "services") into ~/Library/LaunchAgents.
+     Starts the tmux server with session "main" at login, outside any app:
+     started from a terminal app, the server counts as part of that app, and
+     macOS shows the app as running in the background after it quits.
+     Ghostty attaches with ~/.config/ghostty/tmux-main.sh. -->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>local.tmux.main</string>
+    <!-- a login shell, so the server gets the same environment as before -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/zsh</string>
+        <string>-l</string>
+        <string>-c</string>
+        <string>cd &amp;&amp; /opt/homebrew/bin/tmux has-session -t main 2&gt;/dev/null || exec /opt/homebrew/bin/tmux new-session -d -s main</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>LANG</key>
+        <string>en_US.UTF-8</string>
+        <key>SHELL</key>
+        <string>/bin/zsh</string>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <!-- tmux forks its server and the start command exits: without this,
+         launchd would kill the server along with the job -->
+    <key>AbandonProcessGroup</key>
+    <true/>
+    <key>StandardErrorPath</key>
+    <string>/tmp/tmux-main.log</string>
+</dict>
+</plist>

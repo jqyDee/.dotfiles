@@ -29,7 +29,7 @@ brew "unison"
 cask "bitwarden"
 
 cask "nikitabobko/tap/aerospace", trusted: true
-cask "alacritty"
+cask "ghostty"
 cask "font-hack-nerd-font"
 cask "font-sf-mono"
 cask "font-sf-pro"

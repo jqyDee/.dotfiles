@@ -1,0 +1,53 @@
+# Ghostty, ported from ../alacritty (kept for now). Reload: cmd-shift-,
+# All options: ghostty +show-config --default --docs
+
+# one window attached to the tmux session "main". The server runs as the
+# LaunchAgent local.tmux.main (started at login, see tmux-main.sh), so it
+# keeps running when Ghostty quits without Ghostty staying "in the background"
+command = /bin/zsh -l -c "exec ~/.config/ghostty/tmux-main.sh"
+working-directory = home
+window-save-state = never
+quit-after-last-window-closed = true
+confirm-close-surface = false
+# cmd-w quits the app instead of closing the window
+keybind = super+w=quit
+
+# window: no title bar buttons, small padding
+macos-titlebar-style = hidden
+window-padding-x = 2
+window-padding-y = 2
+window-padding-balance = false
+
+# font: Hack Nerd Font, as in Alacritty (offset x/y = 1 adds a pixel to
+# each cell)
+font-family = Hack Nerd Font Mono
+font-size = 15
+adjust-cell-width = 1
+adjust-cell-height = 1
+
+# cursor: blinking block, hollow when the window is unfocused (default)
+cursor-style = block
+cursor-style-blink = true
+
+# selection goes straight to the clipboard
+copy-on-select = clipboard
+
+# colors: Gruvbox Material (hard background), bright = normal
+background = #1d2021
+foreground = #d4be98
+palette = 0=#32302f
+palette = 1=#ea6962
+palette = 2=#a9b665
+palette = 3=#d8a657
+palette = 4=#7daea3
+palette = 5=#d3869b
+palette = 6=#89b482
+palette = 7=#d4be98
+palette = 8=#32302f
+palette = 9=#ea6962
+palette = 10=#a9b665
+palette = 11=#d8a657
+palette = 12=#7daea3
+palette = 13=#d3869b
+palette = 14=#89b482
+palette = 15=#d4be98
