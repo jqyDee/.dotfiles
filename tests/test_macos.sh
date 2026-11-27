@@ -93,3 +93,33 @@ test_safari_set_no_followup() {
     assert_log_lacks '^defaults write com.apple.Safari'
     case "$(print_summary)" in *"restart Safari"*) fail "restart followup without change" ;; esac
 }
+
+toolbar_key="ExtensionsToolbarConfiguration BrowserToolbarIdentifier-v4.6"
+
+test_safari_toolbar_written_as_dict() {
+    safari_access
+    step_macos >/dev/null
+    assert_log_has "^defaults write com.apple.Safari $toolbar_key <dict><key>OrderedToolbarItemIdentifiers</key><array><string>CombinedSidebarTabGroupToolbarIdentifier</string>"
+    assert_contains "restart Safari" "$(print_summary)"
+}
+
+test_safari_toolbar_same_layout_no_write() {
+    safari_access
+    all_set
+    # how `defaults read` prints a dictionary: other key order, other format
+    fake_default com.apple.Safari "$toolbar_key" dictionary "$(defaults read com.apple.Safari "$toolbar_key" |
+        plutil -convert json -o - - | sed 's/^/ /')"
+    : >"$STUB_LOG"
+    step_macos >/dev/null
+    assert_log_lacks "^defaults write com.apple.Safari $toolbar_key"
+}
+
+test_safari_toolbar_drift_in_check() {
+    safari_access
+    all_set
+    MODE=check
+    fake_default com.apple.Safari "$toolbar_key" dictionary '{"OrderedToolbarItemIdentifiers":["BackForwardToolbarIdentifier"]}'
+    step_macos >/dev/null
+    assert_contains "$toolbar_key: differs" "$(print_summary)"
+    assert_log_lacks '^defaults write'
+}

@@ -55,6 +55,39 @@ setting() {
     esac
 }
 
+# _macos_plist_xml: stdin (XML or the format `defaults read` prints) as XML
+# with sorted keys. Only for strings: `defaults read` prints numbers and bools
+# the same way, so they would come back as strings.
+_macos_plist_xml() {
+    plutil -convert xml1 -o - - 2>/dev/null
+}
+
+# setting_plist <domain> <key> <xml>: like `setting`, for a dictionary or an
+# array of strings, written as one line of plist XML (`<dict>…</dict>`)
+setting_plist() {
+    local domain=$1 key=$2 value=$3 current want
+    want=$(printf '%s' "$value" | _macos_plist_xml)
+    current=$(defaults read "$domain" "$key" 2>/dev/null | _macos_plist_xml) || current=""
+    [ "$current" = "$want" ] && return 0
+
+    if [ "$MODE" = check ]; then
+        note_drift "$domain $key: ${current:+differs}${current:-(unset)}"
+        return 0
+    fi
+    defaults write "$domain" "$key" "$value"
+    note_change "$domain $key"
+    case $domain in
+    com.apple.Safari) _MACOS_SAFARI=1 ;;
+    esac
+}
+
+# _macos_strings <string...>: a plist XML array of strings
+_macos_strings() {
+    printf '<array>'
+    [ $# -eq 0 ] || printf '<string>%s</string>' "$@"
+    printf '</array>'
+}
+
 # Safari keeps its settings in its sandbox container. Without Full Disk
 # Access `defaults` can't see them: reads come back unset and writes land in
 # the wrong file, so skip them instead.
@@ -77,6 +110,29 @@ _macos_safari() {
     setting com.apple.Safari HomePage -string "http://localhost:8765/"
     setting com.apple.Safari NewWindowBehavior -int 0 # new windows: homepage
     setting com.apple.Safari NewTabBehavior -int 4    # new tabs: Start Page
+
+    # toolbar layout, normal and private windows. Extension buttons are named
+    # "<bundle id> (<team id>) <item>" and only show once the extension is
+    # installed and turned on (AdGuard, Noir and Zotero are in the Brewfile).
+    # The -v4.6/-v1 suffix is Safari's toolbar version: a Safari update can
+    # move to a new key and ignore these.
+    local adguard="com.adguard.safari.AdGuard.Extension (TC3Q7MAJXF) Button"
+    local adguard_assistant="com.adguard.mac.adguard.safari-assistant (TC3Q7MAJXF) Button"
+    local noir="nl.jeffreykuiken.NoirApp.mac.Mac-Extension (X23AVVY2HZ) NoirPopup"
+    local zotero="org.zotero.zotero.SafariExtension (8LAYR367YV) Button"
+    local zotero_web="WebExtension-org.zotero.zotero.SafariWebExtension (8LAYR367YV)"
+    setting_plist com.apple.Safari "ExtensionsToolbarConfiguration BrowserToolbarIdentifier-v4.6" \
+        "<dict><key>OrderedToolbarItemIdentifiers</key>$(_macos_strings \
+            CombinedSidebarTabGroupToolbarIdentifier SidebarSeparatorToolbarItemIdentifier \
+            BackForwardToolbarIdentifier "$adguard" "$adguard_assistant" "$noir" "$zotero" \
+            "$zotero_web" UnifiedTabBarToolbarIdentifier ShareToolbarIdentifier \
+            NewTabToolbarIdentifier TabPickerToolbarIdentifier)<key>UserRemovedToolbarItemIdentifiers</key>$(_macos_strings \
+            "$adguard")</dict>"
+    setting_plist com.apple.Safari "ExtensionsToolbarConfiguration PrivateBrowsingCompactTabBarBrowserToolbarIdentifier-v1" \
+        "<dict><key>OrderedToolbarItemIdentifiers</key>$(_macos_strings \
+            CombinedSidebarTabGroupToolbarIdentifier SidebarSeparatorToolbarItemIdentifier \
+            BackForwardToolbarIdentifier "$noir" "$adguard" UnifiedTabBarToolbarIdentifier \
+            ShareToolbarIdentifier NewTabToolbarIdentifier TabPickerToolbarIdentifier)</dict>"
 }
 
 step_macos() {

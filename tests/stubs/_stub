@@ -52,7 +52,8 @@ if [ "$tool" = defaults ]; then
         -bool) case "$5" in true | yes | 1) v=1 ;; *) v=0 ;; esac; t=boolean ;;
         -int) v=$5 t=integer ;;
         -float) v=$5 t=float ;;
-        *) v=$5 t=string ;;
+        -string) v=$5 t=string ;;
+        *) v=$4 t=dictionary ;; # a plist value without a type: setting_plist
         esac
         echo "$t $v" >"$dir/$3"
         ;;
