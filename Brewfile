@@ -83,8 +83,6 @@ brew "jqydee/tap/udo"
 cask "adguard"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "nikitabobko/tap/aerospace", trusted: true
-# GPU-accelerated terminal emulator
-cask "alacritty"
 # Terminal interface for Antigravity agents
 cask "antigravity-cli"
 # Password manager; its SSH agent holds the SSH keys

@@ -26,6 +26,10 @@ NOISE = (
     "timestamp",
     "LastUpdate",
     "lastUpdate",
+    "Analytics",  # MenuBarAnalytics.lastReportedTrailingItemCount, ...
+    "SpacesDisplayConfiguration",  # com.apple.spaces: current Spaces per display
+    "ActivityBaseDates",  # com.apple.xpc.activity2: scheduler state
+    "SKDUserDefaultsRoot",  # TokenBucketRateLimiter
 )
 
 

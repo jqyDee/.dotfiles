@@ -163,7 +163,6 @@ step_macos() {
     setting NSGlobalDomain InitialKeyRepeat -int 12
     setting NSGlobalDomain ApplePressAndHoldEnabled -bool false
     setting NSGlobalDomain AppleInterfaceStyle -string Dark
-    setting NSGlobalDomain _HIHideMenuBar -bool true # sketchybar replaces it
     setting NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
     setting NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
     setting NSGlobalDomain com.apple.swipescrolldirection -bool true # macOS default
@@ -172,7 +171,13 @@ step_macos() {
     setting NSGlobalDomain com.apple.keyboard.fnState -bool true     # F1-F12 as standard function keys
     setting com.apple.HIToolbox AppleFnUsageType -int 0              # fn/globe key does nothing
 
-    # menu bar (hidden for sketchybar, still used by Control Center)
+    # menu bar (hidden for sketchybar, still used by Control Center).
+    # macOS 26+ reads "Automatically hide and show the menu bar" from
+    # AutoHideMenuBarOption (0 always, 1 on desktop only, 2 in full screen
+    # only, 3 never); older versions and AppKit apps read _HIHideMenuBar.
+    # Keep both in step, or some apps hide the bar and others don't.
+    setting NSGlobalDomain _HIHideMenuBar -bool true
+    setting com.apple.controlcenter AutoHideMenuBarOption -int 0
     setting com.apple.menuextra.clock ShowSeconds -bool true
     setting com.apple.TextInputMenu visible -bool false # no input source menu
     # which Control Center items show, and their order (pixels from the right)
