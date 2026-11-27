@@ -1,10 +1,37 @@
 # shellcheck shell=bash
 # Steps: bundle (Brewfile), stow (config links).
 
+# The Brewfile's `cargo` entries need cargo on PATH, or brew bundle installs
+# the `rust` formula to get one (plus libgit2 and libssh2), which then shows
+# as drift. rustup is keg-only and .zshrc adds it to PATH, but bootstrap runs
+# in bash without it. So install rustup and a toolchain first, and put
+# rustup's cargo on PATH for the bundle run (and for --check, so it lists
+# the same crates). Only apply mode installs anything.
+_bundle_rustup() {
+    local rustup_bin
+    rustup_bin="$("$BREW" --prefix)/opt/rustup/bin"
+    export PATH="$rustup_bin:$HOME/.cargo/bin:$PATH"
+    [ "$MODE" = apply ] || return 0
+    if [ ! -x "$rustup_bin/rustup" ]; then
+        "$BREW" install rustup || {
+            note_failure "brew install rustup"
+            return 1
+        }
+    fi
+    if rustup toolchain list 2>/dev/null | grep -qi "^no installed toolchains"; then
+        rustup default stable || {
+            note_failure "rustup default stable"
+            return 1
+        }
+        note_change "rust stable toolchain (rustup)"
+    fi
+}
+
 step_bundle() {
     [ -z "${NO_BREW:-}" ] || return 0
     local brewfile="$DOTFILES/Brewfile" out line
 
+    _bundle_rustup || return 1
     if [ "$MODE" = apply ]; then
         "$BREW" bundle --file="$brewfile" --no-upgrade && return 0
         note_failure "brew bundle (App Store signed in?)"
