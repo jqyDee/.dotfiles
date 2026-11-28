@@ -272,6 +272,14 @@ step_macos() {
 
     # trackpad and mouse
     setting com.apple.AppleMultitouchTrackpad Clicking -bool true # tap to click
+    setting NSGlobalDomain com.apple.trackpad.forceClick -bool false # no Force Click
+    setting com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true
+    setting com.apple.AppleMultitouchTrackpad ActuateDetents -int 0 # no haptic detents
+    setting com.apple.AppleMultitouchTrackpad FirstClickThreshold -int 0 # click pressure: light
+    setting com.apple.AppleMultitouchTrackpad SecondClickThreshold -int 0
+    setting com.apple.AppleMultitouchTrackpad TrackpadThreeFingerTapGesture -int 0 # no three-finger tap, macOS default
+    setting com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerTapGesture -int 0
+    setting_host NSGlobalDomain com.apple.trackpad.threeFingerTapGesture -int 0
     setting NSGlobalDomain com.apple.mouse.scaling -float 1.5     # mouse tracking speed
 
     # desktop and Spaces
