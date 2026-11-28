@@ -9,8 +9,6 @@ working-directory = home
 window-save-state = never
 quit-after-last-window-closed = true
 confirm-close-surface = false
-# cmd-w quits the app instead of closing the window
-keybind = super+w=quit
 
 # window: no title bar buttons, small padding
 macos-titlebar-style = hidden
